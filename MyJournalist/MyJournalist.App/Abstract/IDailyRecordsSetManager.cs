@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyJournalist.Domain.Entity;
+﻿using MyJournalist.Domain.Entity;
 
 
 namespace MyJournalist.App.Abstract;

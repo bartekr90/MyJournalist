@@ -1,4 +1,6 @@
-﻿namespace MyJournalist.App.Abstract;
+﻿using MyJournalist.Domain.Common;
+
+namespace MyJournalist.App.Abstract;
 
 public interface IFileCollectionService<T> where T : BaseEntity
 {

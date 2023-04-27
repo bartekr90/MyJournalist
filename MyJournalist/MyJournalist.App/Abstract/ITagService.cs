@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using MyJournalist.Domain.Entity;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MyJournalist.App.Abstract;
 

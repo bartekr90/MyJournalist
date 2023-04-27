@@ -1,4 +1,6 @@
-﻿namespace MyJournalist.App.Abstract;
+﻿using MyJournalist.Domain.Entity;
+
+namespace MyJournalist.App.Abstract;
 
 public interface IRecordManager
 {

@@ -1,3 +1,7 @@
+using MyJournalist.App.Abstract;
+using MyJournalist.App.Common;
+using MyJournalist.App.Concrete;
+using MyJournalist.App.Managers;
 using MyJournalist.Domain.Entity;
 using MyJournalist.Worker;
 

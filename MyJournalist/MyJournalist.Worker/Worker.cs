@@ -1,3 +1,4 @@
+using MyJournalist.App.Abstract;
 using MyJournalist.Domain.Entity;
 
 namespace MyJournalist.Worker;

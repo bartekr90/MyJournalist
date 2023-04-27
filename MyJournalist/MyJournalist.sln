@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyJournalist.Worker", "MyJo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyJournalist.Domain", "MyJournalist.Domain\MyJournalist.Domain.csproj", "{39B02779-E1E0-46FD-B1E5-097EEE84954B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyJournalist.App", "MyJournalist.App\MyJournalist.App.csproj", "{2E7E1876-5223-484C-AC86-1B61FEDFB3E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{39B02779-E1E0-46FD-B1E5-097EEE84954B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39B02779-E1E0-46FD-B1E5-097EEE84954B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39B02779-E1E0-46FD-B1E5-097EEE84954B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E7E1876-5223-484C-AC86-1B61FEDFB3E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E7E1876-5223-484C-AC86-1B61FEDFB3E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E7E1876-5223-484C-AC86-1B61FEDFB3E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E7E1876-5223-484C-AC86-1B61FEDFB3E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

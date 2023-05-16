@@ -84,9 +84,9 @@ public class DailyRecordsSetService : BaseEntityService<DailyRecordsSet>, IEqual
     {
         if (primarySets == null && newSets == null)
             return null;
-        else if (primarySets == null)
+        if (primarySets == null)
             return newSets.ToList();
-        else if (newSets == null)
+        if (newSets == null)
             return primarySets.ToList();
 
         var mergedSets = primarySets.Union(newSets, this);
@@ -120,7 +120,7 @@ public class DailyRecordsSetService : BaseEntityService<DailyRecordsSet>, IEqual
         return areEqual;
     }
 
-    public int GetHashCode([DisallowNull] DailyRecordsSet obj) =>    
+    public int GetHashCode([DisallowNull] DailyRecordsSet obj) =>
          obj.RefersToDate.Date.ToString().ToLower().GetHashCode();
-    
+
 }

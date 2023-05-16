@@ -5,9 +5,11 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyJournalist.Worker", "MyJournalist.Worker\MyJournalist.Worker.csproj", "{6616E63E-3B61-4A98-851A-61EADE1B495B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyJournalist.Domain", "MyJournalist.Domain\MyJournalist.Domain.csproj", "{39B02779-E1E0-46FD-B1E5-097EEE84954B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyJournalist.Domain", "MyJournalist.Domain\MyJournalist.Domain.csproj", "{39B02779-E1E0-46FD-B1E5-097EEE84954B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyJournalist.App", "MyJournalist.App\MyJournalist.App.csproj", "{2E7E1876-5223-484C-AC86-1B61FEDFB3E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyJournalist.App", "MyJournalist.App\MyJournalist.App.csproj", "{2E7E1876-5223-484C-AC86-1B61FEDFB3E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyJournalist.App.Tests", "MyJournalist.App.Tests\MyJournalist.App.Tests.csproj", "{EA5FE0E6-9947-4AA3-BB22-8B1FF6D7028A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{2E7E1876-5223-484C-AC86-1B61FEDFB3E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E7E1876-5223-484C-AC86-1B61FEDFB3E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E7E1876-5223-484C-AC86-1B61FEDFB3E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA5FE0E6-9947-4AA3-BB22-8B1FF6D7028A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA5FE0E6-9947-4AA3-BB22-8B1FF6D7028A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA5FE0E6-9947-4AA3-BB22-8B1FF6D7028A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA5FE0E6-9947-4AA3-BB22-8B1FF6D7028A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -22,17 +22,26 @@ public class DailyRecordsSetService : BaseEntityService<DailyRecordsSet>, IEqual
 
     public override DailyRecordsSet GetEmptyObj(IDateTimeProvider provider)
     {
-        var dailySet = new DailyRecordsSet
+        return new DailyRecordsSet
         {
             HasAnyRecords = false,
             CreatedDateTime = provider.Now,
             ModifiedDateTime = provider.Now,
-            RefersToDate = RefersToDate.Date,
+            RefersToDate = RefersToDateVerification(provider),
             EmailHasBeenSent = false,
             HasAnyTags = false,
-            MergedContents = "no content have been recorded",
+            MergedContents = "no content",
         };
-        return dailySet;
+    }
+
+    private DateTimeOffset RefersToDateVerification(IDateTimeProvider provider)
+    {
+        if (RefersToDate == DateTimeOffset.MinValue)
+        {
+            var date = RefersToDate.Date.ToDateTimeOffset();
+            return date <= provider.Now ? date : provider.Now;
+        }
+        return RefersToDate <= provider.Now ? RefersToDate : provider.Now;
     }
 
     private string MergeContent(ICollection<Record> records)
@@ -47,28 +56,28 @@ public class DailyRecordsSetService : BaseEntityService<DailyRecordsSet>, IEqual
                 mergedContent.Append("\n***\n");
             }
         }
-        if (mergedContent.Length >= 6)
-            mergedContent.Remove(mergedContent.Length - 6, 6);
-
         return mergedContent.ToString();
     }
 
-    public DailyRecordsSet GetDailyRecordsSet(ICollection<Record> records, ICollection<Tag>? tags, IDateTimeProvider dateTimeProvider)
+    public DailyRecordsSet GetDailyRecordsSet(ICollection<Record> records, ICollection<Tag>? tags, IDateTimeProvider provider)
     {
-        string content = MergeContent(records);
-        var dailySet = new DailyRecordsSet
+        var content = MergeContent(records);
+
+        if (string.IsNullOrEmpty(content))
+            content = "no content";
+
+        return new DailyRecordsSet
         {
             Records = records,
             HasAnyRecords = true,
-            CreatedDateTime = dateTimeProvider.Now,
-            ModifiedDateTime = dateTimeProvider.Now,
-            RefersToDate = RefersToDate.Date,
+            CreatedDateTime = provider.Now,
+            ModifiedDateTime = provider.Now,
+            RefersToDate = RefersToDateVerification(provider),
             EmailHasBeenSent = false,
             MergedTags = tags,
             HasAnyTags = (tags == null || tags.Count == 0) ? false : true,
-            MergedContents = content,
+            MergedContents = content
         };
-        return dailySet;
     }
 
     public List<DailyRecordsSet> MakeUnion(ICollection<DailyRecordsSet>? primarySets, ICollection<DailyRecordsSet>? newSets)
@@ -95,7 +104,6 @@ public class DailyRecordsSetService : BaseEntityService<DailyRecordsSet>, IEqual
 
         existingDailySets.Records = recordList;
         existingDailySets.MergedTags = tags;
-        existingDailySets.MergedContents += ("\n***\n");
         existingDailySets.MergedContents += dailySet.MergedContents;
         existingDailySets.EmailHasBeenSent |= dailySet.EmailHasBeenSent;
         existingDailySets.HasAnyRecords |= dailySet.HasAnyRecords;
@@ -104,7 +112,7 @@ public class DailyRecordsSetService : BaseEntityService<DailyRecordsSet>, IEqual
 
     public bool Equals(DailyRecordsSet set1, DailyRecordsSet set2)
     {
-        var areEqual = DateTimeOffset.Equals(set1.RefersToDate, set2.RefersToDate);
+        var areEqual = DateTimeOffset.Equals(set1.RefersToDate.Date, set2.RefersToDate.Date);
 
         if (areEqual)
             MergeDailySets(set1, set2);
@@ -112,9 +120,7 @@ public class DailyRecordsSetService : BaseEntityService<DailyRecordsSet>, IEqual
         return areEqual;
     }
 
-    public int GetHashCode([DisallowNull] DailyRecordsSet obj)
-    {
-        return obj.RefersToDate.ToString().ToLower().GetHashCode();
-
-    }
+    public int GetHashCode([DisallowNull] DailyRecordsSet obj) =>    
+         obj.RefersToDate.Date.ToString().ToLower().GetHashCode();
+    
 }

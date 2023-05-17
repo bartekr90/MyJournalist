@@ -17,11 +17,14 @@ public class RecordService : BaseEntityService<Record>, IRecordService
 
         if (hasAnyTags)
         {
-            SetInitialNameForTag(tags, nameOfRecord);
             tokens = tags.First().TimeTokens;
+            foreach (var tag in tags)
+            {
+                tag.NameOfInitialRecord = nameOfRecord;
+            }
         }
 
-        Record record = new Record
+        return new Record
         {
             Name = nameOfRecord,
             Content = contentFromTxt,
@@ -32,16 +35,7 @@ public class RecordService : BaseEntityService<Record>, IRecordService
             TimeTokens = tokens,
             CreatedDateTime = provider.Now,
             ModifiedDateTime = provider.Now,
-        };
-        return record;
-
-        static void SetInitialNameForTag(ICollection<Tag> tags, string nameOfRecord)
-        {
-            foreach (var tag in tags)
-            {
-                tag.NameOfInitialRecord = nameOfRecord;
-            }
-        }
+        };               
     }
 
     private string GetNameOfRecord(DateTimeOffset contentDate)

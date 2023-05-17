@@ -10,3 +10,11 @@ Add logging
 Add sending email with summary
 Add unit and integration tests
 Add reading a .txt file when content is saved in it
+```
+Katalog główny, w którym wyszukiwane są pliki do scalenia: C:\Users\mielczarek\source\repos\KursZostanProgramistaASPdotNET
+
+
+------------------------------------USTAW KATALOG, W KTÓRYM CHCESZ WYSZUKIWAĆ PLIKI .MD-----------------------------------
+
+Wprowadź ścieżkę dostępu do katalogu:
+```

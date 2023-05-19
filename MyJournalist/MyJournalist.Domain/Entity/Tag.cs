@@ -13,7 +13,7 @@ public class Tag : BaseEntity
 
     public Tag()
     {
-        Name = string.Empty;
+        Name = "";
         IdOfInitialRecord = 0;
         NameOfInitialRecord = string.Empty;
     }

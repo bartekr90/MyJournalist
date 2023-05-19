@@ -65,10 +65,13 @@ public class TagService : BaseEntityService<Tag>, IEqualityComparer<Tag>, ITagSe
         }
     }
 
-    public Tag GetTag(string name, IDateTimeProvider provider, uint tokens)
+    public Tag GetTag(string tagName, IDateTimeProvider provider, uint tokens)
     {
+        if (string.IsNullOrWhiteSpace(tagName))
+            tagName = "DefaultName";
+
         Tag tag = GetEmptyObj(provider);
-        tag.Name = name;
+        tag.Name = tagName;
         tag.TimeTokens = tokens;
         return tag;
     }
@@ -88,10 +91,7 @@ public class TagService : BaseEntityService<Tag>, IEqualityComparer<Tag>, ITagSe
             var tags = new List<Tag>();
             foreach (Match match in tagMatches)
             {
-                var tagName = match.Value.Substring(1).ToLower();
-
-                if (string.IsNullOrWhiteSpace(tagName))
-                    tagName = "ogólny";
+                var tagName = match.Value.Substring(1).ToLower();               
 
                 Tag tag = GetTag(tagName, provider, tokens);
 

@@ -525,7 +525,7 @@ internal class SampleLists
         {
             Tag tag = new Tag
             {
-                Id = i + 1 + 6,
+                Id = i + 1 + 9,
                 CreatedById = i + 1,
                 CreatedDateTime = tupleArray[33 + i].Item2,
                 ModifiedById = i + 1,
@@ -588,7 +588,7 @@ internal class SampleLists
         {
             Tag tag = new Tag
             {
-                Id = i + 1 + 7,
+                Id = i + 1 + 13,
                 CreatedById = i + 1,
                 CreatedDateTime = tupleArray[37 + i].Item2,
                 ModifiedById = i + 1,
@@ -651,7 +651,7 @@ internal class SampleLists
         {
             Tag tag = new Tag
             {
-                Id = i + 1 + 8,
+                Id = i + 1 + 17,
                 CreatedById = i + 1,
                 CreatedDateTime = tupleArray[41 + i].Item2,
                 ModifiedById = i + 1,
@@ -660,6 +660,7 @@ internal class SampleLists
                 IdOfInitialRecord = i + 1 + 8,
                 NameOfInitialRecord = "Rec_From_03April_list8",
                 Name = tagsArray[12 + i],
+                TimeTokens = 5
             };
             list.Add(tag);
         }
@@ -714,7 +715,7 @@ internal class SampleLists
         {
             Tag tag = new Tag
             {
-                Id = i + 1 + 9,
+                Id = i + 1 + 21,
                 CreatedById = i + 1,
                 CreatedDateTime = tupleArray[45 + i].Item2,
                 ModifiedById = i + 1,

@@ -1,4 +1,6 @@
-﻿namespace MyJournalist.App.Tests;
+﻿using MyJournalist.Domain.Entity;
+
+namespace MyJournalist.App.Tests;
 
 internal static class SampleDataSet
 {
@@ -102,7 +104,7 @@ internal static class SampleDataSet
         "Inny tekst 1 $3 #pierwszy",
         "Losowy opis 1 $3 #opis",
         "Tekst numer 2 $3 #drugi",
-        "Przykładowy opis 1 #opis",
+        "Przykładowy opis 1 #opis $12",
         "Inny tekst 2 #drugi",
         "Opisowy tekst 1 #pierwszy",
         "Przykład 2 #przykład",
@@ -110,10 +112,10 @@ internal static class SampleDataSet
         "Tekst 2 #tekst",
         "Inny przykład 1 #przykład",
         "Opis 2 #opis",
-        "Przykładowy tekst 3 #trzeci",
-        "Tekst 3 #tekst",
-        "Przykład 3 #przykład",
-        "Inny opis 1 #opis",
+        "Przykładowy $5 tekst 3 #trzeci",
+        "Tekst 3 $5#tekst",
+        "$5Przykład 3 #przykład",
+        "Inny opis 1 #opis$5",
         "Przykładowy opis 2 #opis",
         "Opis 3 #opis",
         "Tekst opisowy 1 #pierwszy",
@@ -130,6 +132,14 @@ internal static class SampleDataSet
         "Tekst opisowy 2 #pierwszy",
         "Inny tekst 4 #czwarty"
     };
+    public static string MergedContentArrayWithTagsId0_3 =>
+       $"{contentArrayWithTags[0]} {contentArrayWithTags[1]} {contentArrayWithTags[2]} {contentArrayWithTags[3]}";
+
+    public static string MergedContentArrayWithTagsId4_7 =>
+       $"{contentArrayWithTags[4]} {contentArrayWithTags[5]} {contentArrayWithTags[6]} {contentArrayWithTags[7]}";
+
+    public static string MergedContentArrayWithTagsId8_11 =>
+       $"{contentArrayWithTags[8]} {contentArrayWithTags[9]} {contentArrayWithTags[10]} {contentArrayWithTags[11]}";
 
     //*******************************************************************************************************
 
@@ -168,6 +178,125 @@ internal static class SampleDataSet
         "czwarty"
     };
 
+    public static string[] subTagsArrayId0_3 =>
+        new string[] { tagsArray[0], tagsArray[1], tagsArray[2], tagsArray[3] };
+
+    public static string[] subTagsArrayId4_7 =>
+        new string[] { tagsArray[4], tagsArray[5], tagsArray[6], tagsArray[7] };
+
+    public static string[] subTagsArrayId8_11 =>
+        new string[] { tagsArray[8], tagsArray[9], tagsArray[10], tagsArray[11] };
+
+    //*******************************************************************************************************
+    public static string[] subTagsArrayID04_11 =>
+       new string[] { tagsArray[4], tagsArray[5], tagsArray[6], tagsArray[7], tagsArray[9] };
+
+    public static string[] subTagsArrayID00_03ID12_15 =>
+          new string[] { tagsArray[0], tagsArray[1], tagsArray[2], tagsArray[12], tagsArray[13], tagsArray[14] };
+
+    public static List<Tag> TagsMerged_Nr06_Nr07()
+    {
+        List<Tag> list = new List<Tag>();
+
+        for (int i = 0; i < 4; i++)
+        {
+            Tag tag = new Tag
+            {
+                Id = i + 1 + 9,
+                CreatedById = i + 1,
+                CreatedDateTime = tupleArray[33 + i].Item2,
+                ModifiedById = i + 1,
+                ModifiedDateTime = tupleArray[33 + i].Item2,
+                ContentDate = tupleArray[33 + i].Item1,
+                IdOfInitialRecord = i + 1 + 6,
+                Name = subTagsArrayID04_11[i],
+                NameOfInitialRecord = "Rec_From_01April_list6"
+            };
+            list.Add(tag);
+        }
+        Tag tag5 = new Tag
+        {
+            Id = 15,
+            CreatedById = 2,
+            CreatedDateTime = tupleArray[38].Item2,
+            ModifiedById = 2,
+            ModifiedDateTime = tupleArray[38].Item2,
+            ContentDate = tupleArray[38].Item1,
+            IdOfInitialRecord = 9,
+            Name = subTagsArrayID04_11[4],
+            NameOfInitialRecord = "Rec_From_02April_list7"
+        };
+        list.Add(tag5);
+        return list;
+    }
+    public static List<Tag> TagsMerged_Nr05_Nr08()
+    {       
+        List<Tag> list = new List<Tag>();
+
+        Tag tag0 = new Tag
+        {
+            Id = 0 + 1 + 5,
+            CreatedById = 0 + 1,
+            CreatedDateTime = tupleArray[29 + 0].Item2,
+            ModifiedById = 0 + 1,
+            ModifiedDateTime = tupleArray[29 + 0].Item2,
+            ContentDate = tupleArray[29 + 0].Item1,
+            IdOfInitialRecord = 0 + 1 + 5,
+            Name = subTagsArrayID00_03ID12_15[0],
+            NameOfInitialRecord = "Rec_From_05march_list5",
+            TimeTokens = 6
+        };
+        list.Add(tag0);
+
+        Tag tag1 = new Tag
+        {
+            Id = 1 + 1 + 5,
+            CreatedById = 1 + 1,
+            CreatedDateTime = tupleArray[29 + 1].Item2,
+            ModifiedById = 1 + 1,
+            ModifiedDateTime = tupleArray[29 + 1].Item2,
+            ContentDate = tupleArray[29 + 1].Item1,
+            IdOfInitialRecord = 1 + 1 + 5,
+            Name = subTagsArrayID00_03ID12_15[1],
+            NameOfInitialRecord = "Rec_From_05march_list5",
+            TimeTokens = 3
+        };
+        list.Add(tag1);
+
+        Tag tag2 = new Tag
+        {
+            Id = 2 + 1 + 5,
+            CreatedById = 2 + 1,
+            CreatedDateTime = tupleArray[29 + 2].Item2,
+            ModifiedById = 2 + 1,
+            ModifiedDateTime = tupleArray[29 + 2].Item2,
+            ContentDate = tupleArray[29 + 2].Item1,
+            IdOfInitialRecord = 2 + 1 + 5,
+            Name = subTagsArrayID00_03ID12_15[2],
+            NameOfInitialRecord = "Rec_From_05march_list5",
+            TimeTokens = 8
+        };
+        list.Add(tag2);
+
+        for (int i = 0; i < 3; i++)
+        {
+            Tag tag = new Tag
+            {
+                Id = i + 1 + 17,
+                CreatedById = i + 1,
+                CreatedDateTime = tupleArray[41 + i].Item2,
+                ModifiedById = i + 1,
+                ModifiedDateTime = tupleArray[41 + i].Item2,
+                ContentDate = tupleArray[41 + i].Item1,
+                IdOfInitialRecord = i + 1 + 8,
+                Name = subTagsArrayID00_03ID12_15[i + 3],
+                NameOfInitialRecord = "Rec_From_03April_list8",
+                TimeTokens = 5
+            };
+            list.Add(tag);
+        }
+        return list;
+    }
     //*******************************************************************************************************
 
 }

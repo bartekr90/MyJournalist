@@ -59,7 +59,7 @@ public class RecordServiceTests
            {new DateTimeOffset(9999, 12, 31, 23, 59, 59, TimeSpan.Zero), TagsMergedMarch2023TokensNr5(), 3, " ", false},
            { new DateTimeOffset(2023, 5, 7, 10, 30, 0, 123, TimeSpan.Zero), TagsMerged01April2023Nr6(), 0, "", false },
            { new DateTimeOffset(2023, 5, 7, 0, 0, 0, TimeSpan.Zero), TagsMerged02April2023Nr7(), 0, "someContent", true },
-           { new DateTimeOffset(2023, 5, 7, 23, 59, 59, TimeSpan.Zero), TagsMerged03April2023Nr8(), 0, null, false },
+           { new DateTimeOffset(2023, 5, 7, 23, 59, 59, TimeSpan.Zero), TagsMerged03April2023Nr8(), 5, null, false },
            { new DateTimeOffset(2013, 5, 7, 0, 0, 0, TimeSpan.Zero), TagsMerged04April2023Nr9(), 0, "      ", false },
        };
 

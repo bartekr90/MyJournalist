@@ -15,3 +15,6 @@ The principle of the application is to read the content from the myNotes.txt fil
 
 - Add reading .txt file when content is saved in
 
+- Add user settings
+
+- Add some async methods

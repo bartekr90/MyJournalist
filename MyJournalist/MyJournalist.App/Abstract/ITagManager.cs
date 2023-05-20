@@ -6,7 +6,7 @@ public interface ITagManager
 {
     List<Tag> GetTagsFromContent(string contentFromTxt);
     void LoadTagsFromFile();
-    void MargeAndSaveTagsInFile(ICollection<Tag> tags);
+    void MergeAndSaveTagsInFile(ICollection<Tag> tags);
     List<Tag> MergeTags(ICollection<Tag>? primaryTags, ICollection<Tag>? newTags);
     List<Tag> MergeTagsFromRecordList(List<Record> records);
 }

@@ -86,7 +86,7 @@ public class Worker : BackgroundService
         List<Record> presentRecords = _recordManager.FindEqualDateRecords(recordsList, _dateTimeProvider.Now);
         _recordManager.ClearTxt();
         _recordManager.SaveListInFile(presentRecords);
-        _tagManager.MargeAndSaveTagsInFile(tagsToSave);
+        _tagManager.MergeAndSaveTagsInFile(tagsToSave);
 
     }
 }

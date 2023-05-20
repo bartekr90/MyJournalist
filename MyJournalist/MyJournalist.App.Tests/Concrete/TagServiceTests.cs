@@ -351,11 +351,12 @@ public class TagServiceTests
         uint tokens = _sut.FindTokens(content);
 
         // Act
-        var tag = _sut.GetTag(content, _dTProviderMock.Object, tokens);
+        Tag tag = _sut.GetTag(content, _dTProviderMock.Object, tokens);
 
         // Assert
         tag.Name.Should().Be(content);
         tokens.Should().Be(expectedTokens);
         tag.TimeTokens.Should().Be(tokens);
+        tokens.Should().BeGreaterThanOrEqualTo(0);
     }
 }

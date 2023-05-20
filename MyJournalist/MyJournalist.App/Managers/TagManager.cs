@@ -18,7 +18,7 @@ public class TagManager : ITagManager
         _tagService = tagService;
     }
 
-    public void MargeAndSaveTagsInFile(ICollection<Tag> tags)
+    public void MergeAndSaveTagsInFile(ICollection<Tag> tags)
     {
         LoadTagsFromFile();
 

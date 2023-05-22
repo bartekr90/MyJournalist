@@ -1,14 +1,7 @@
-﻿using Moq;
-using MyJournalist.App.Abstract;
+﻿using MyJournalist.App.Abstract;
 using MyJournalist.App.Concrete;
 using MyJournalist.App.Managers;
 using MyJournalist.Domain.Entity;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyJournalist.App.Tests.Managers;
 
@@ -20,9 +13,9 @@ public class TagManagerTests
     private readonly Mock<ITagService> _tagServiceMock = new Mock<ITagService>();
 
     public TagManagerTests()
-    {      
+    {
         _sut = new TagManager(_dateTimeProviderMock.Object, _fileServiceMock.Object, _tagServiceMock.Object);
-    }   
+    }
 
     [Fact]
     public void MargeAndSaveTagsInFile_ShouldCallUpdateFileAndClearFile()
@@ -45,7 +38,7 @@ public class TagManagerTests
         // Arrange
         ICollection<Tag>? primaryTags = null;
         ICollection<Tag>? newTags = null;
-        
+
         _tagServiceMock.Setup(t => t.MakeUnion(primaryTags, newTags));
 
         // Act
@@ -60,7 +53,7 @@ public class TagManagerTests
     public void MergeTags_ShouldCallMakeUnion_WhenBothInputTagsNotNull()
     {
         // Arrange
-        ICollection<Tag>? primaryTags = TagsMergedMarch2023TokensNr5();
+        ICollection<Tag>? primaryTags = TagsMarch2023TokensNr5();
         ICollection<Tag>? newTags = TagsMerged03April2023Nr8();
         var expected = TagsMerged_Nr05_Nr08();
 
@@ -112,7 +105,7 @@ public class TagManagerTests
     {
         // Arrange
         var content = "Some content with #Tag1 and #Tag2";
-        var expectedTags = new List<Tag> { new Tag { Id = 1}, new Tag { Id = 1} };
+        var expectedTags = new List<Tag> { new Tag { Id = 1 }, new Tag { Id = 1 } };
         _tagServiceMock.Setup(t => t.FindTokens(content)).Returns(2);
         _tagServiceMock.Setup(t => t.FindAllTags(content, _dateTimeProviderMock.Object, 2)).Returns(expectedTags);
 
@@ -122,24 +115,153 @@ public class TagManagerTests
         // Assert
         _tagServiceMock.Verify(f => f.FindTokens(content), Times.Once);
         _tagServiceMock.Verify(f => f.FindAllTags(content, _dateTimeProviderMock.Object, 2), Times.Once);
-        tags.Should().BeEquivalentTo(expectedTags);        
+        tags.Should().BeEquivalentTo(expectedTags);
     }
 
-    //[Fact]
-    //public void MergeTagsFromRecordList_ShouldMergeTagsFromRecords_WhenRecordsNotNull()
-    //{
-    //    // Arrange
-    //    var records = new List<Record>
-    //    {
-    //        new Record { Tags = new List<Tag> { new Tag("Tag1"), new Tag("Tag2") } },
-    //        new Record { Tags = new List<Tag> { new Tag("Tag2"), new Tag("Tag3") } }
-    //    };
-    //    var expectedMergedTags = new List<Tag> { new Tag("Tag1"), new Tag("Tag2"), new Tag("Tag3") };
+    [Fact]
+    public void MergeTagsFromRecordList_ShouldReturnEmptyList_WhenRecordsIsNull()
+    {
+        // Arrange
+        List<Domain.Entity.Record> records = null;
 
-    //    // Act
-    //    var mergedTags = _sut.MergeTagsFromRecordList(records);
+        // Act
+        List<Tag> result = _sut.MergeTagsFromRecordList(records);
 
-    //    // Assert
-    //    mergedTags.Should().BeEquivalentTo(expectedMergedTags);
-    //}
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void MergeTagsFromRecordList_ShouldReturnEmptyList_WhenRecordsIsEmpty()
+    {
+        // Arrange
+        List<Domain.Entity.Record> records = new List<Domain.Entity.Record>();
+
+        // Act
+        List<Tag> result = _sut.MergeTagsFromRecordList(records);
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void MergeTagsFromRecordList_ShouldCallMakeUnionTwice_WhenMergeTagsFromAllRecordsCalled()
+    {
+        // Arrange
+        List<Domain.Entity.Record> records = new List<Domain.Entity.Record>();
+
+        var record1 = new Domain.Entity.Record
+        {
+            Tags = new List<Tag>
+                {
+                    new Tag
+                    {
+                        Name = "Tag1"
+                    },
+                    new Tag
+                    {
+                        Name = "Tag2"
+                    }
+                }
+        };
+        records.Add(record1);
+
+        var record2 = new Domain.Entity.Record
+        {
+            Tags = new List<Tag>
+                {
+                    new Tag
+                    {
+                        Name = "Tag3"
+                    },
+                    new Tag
+                    {
+                        Name = "Tag4"
+                    }
+                }
+        };
+        records.Add(record2);
+
+        _tagServiceMock.Setup(t => t.MakeUnion(It.IsAny<ICollection<Tag>>(), It.IsAny<ICollection<Tag>>()));
+
+        // Act
+        List<Tag> result = _sut.MergeTagsFromRecordList(records);
+
+        // Assert
+        _tagServiceMock.Verify(x => x.MakeUnion(It.IsAny<ICollection<Tag>>(), It.IsAny<ICollection<Tag>>()), Times.Exactly(2));
+    }
+
+    [Fact]
+    public void MergeTagsFromRecordList_ShouldMergeTagsFromRecords_WhenRecordsNotNull()
+    {
+        // Arrange
+        List<Domain.Entity.Record> records = new List<Domain.Entity.Record>();
+
+        var record1 = new Domain.Entity.Record
+        {
+            Tags = new List<Tag>
+                {
+                    new Tag
+                    {
+                        Name = "Tag1"
+                    },
+                    new Tag
+                    {
+                        Name = "Tag2"
+                    }
+                }
+        };
+        records.Add(record1);
+
+        var record2 = new Domain.Entity.Record
+        {
+            Tags = new List<Tag>
+                {
+                    new Tag
+                    {
+                        Name = "Tag3"
+                    },
+                    new Tag
+                    {
+                        Name = "Tag4"
+                    }
+                }
+        };
+        records.Add(record2);
+        var expectedMergedTags = new List<Tag> { new Tag { Name = "Tag1" }, new Tag { Name = "Tag2" }, new Tag { Name = "Tag3" }, new Tag { Name = "Tag4" } };
+
+        TagService tagService = new TagService();
+        TagManager tagManager = new TagManager(_dateTimeProviderMock.Object, _fileServiceMock.Object, tagService);
+
+        // Act
+        List<Tag> result = tagManager.MergeTagsFromRecordList(records);
+
+        // Assert
+        result.Should().BeEquivalentTo(expectedMergedTags);
+    }
+
+    public static TheoryData<List<Domain.Entity.Record>, List<Tag>> ShouldMergeTagsFromRecords_WhenRecordsNotNull =>
+        new TheoryData<List<Domain.Entity.Record>, List<Tag>>
+        {
+            { RecordListMarch2023TagsTokensNr5(), TagsMergedMarch2023TokensNr5()},
+            { RecordList01April2023TagsNr6(), TagsMerged01April2023Nr6()},
+            { RecordList02April2023TagsNr7(), TagsMerged02April2023Nr7},
+            { RecordList03April2023TagsNr8(), TagsMerged03April2023Nr8()},
+            { RecordList04April2023TagsNr9(), TagsMerged04April2023Nr9},
+        };
+
+    [Theory]
+    [MemberData(nameof(ShouldMergeTagsFromRecords_WhenRecordsNotNull))]
+    public void MergeTagsFromRecordList_ShouldMergeTagsFromRecords_WhenRecordsNotNull_Test2(List<Domain.Entity.Record> records, List<Tag> expected)
+    {
+        // Arrange       
+        TagService tagService = new TagService();
+        TagManager tagManager = new TagManager(_dateTimeProviderMock.Object, _fileServiceMock.Object, tagService);
+
+        // Act
+        List<Tag> result = tagManager.MergeTagsFromRecordList(records);
+
+        // Assert
+        result.Should().BeEquivalentTo(expected);
+    }
 }

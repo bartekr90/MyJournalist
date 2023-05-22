@@ -56,9 +56,9 @@ public class TagServiceTests
     public static TheoryData<string, Tuple<DateTimeOffset, DateTimeOffset>, uint, List<Tag>> ShouldReturnTags_ForGivenData =>
         new TheoryData<string, Tuple<DateTimeOffset, DateTimeOffset>, uint, List<Tag>>
         {
-            {MergedContentArrayWithTagsId0_3, tupleArray[29], 3, TagsMergedMarch2023TokensNr5()},
+            {MergedContentArrayWithTagsId0_3, tupleArray[29], 3, TagsMarch2023TokensNr5()},
             {MergedContentArrayWithTagsId4_7, tupleArray[33], 0, TagsMerged01April2023Nr6()},
-            {MergedContentArrayWithTagsId8_11, tupleArray[37], 0, TagsMerged02April2023Nr7()},
+            {MergedContentArrayWithTagsId8_11, tupleArray[37], 0, Tags02April2023Nr7()},
         };
 
     [Theory]
@@ -175,8 +175,8 @@ public class TagServiceTests
             {TagsMerged01April2023Nr6(), null, TagsMerged01April2023Nr6() },
             {null, TagsMerged01April2023Nr6(), TagsMerged01April2023Nr6() },
             {TagsMerged01April2023Nr6(), TagsMerged01April2023Nr6(), TagsMerged01April2023Nr6() },
-            {TagsMerged01April2023Nr6(), TagsMerged02April2023Nr7(), TagsMerged_Nr06_Nr07()},
-            {TagsMergedMarch2023TokensNr5(), TagsMerged03April2023Nr8(), TagsMerged_Nr05_Nr08()}
+            {TagsMerged01April2023Nr6(), Tags02April2023Nr7(), TagsMerged_Nr06_Nr07()},
+            {TagsMarch2023TokensNr5(), TagsMerged03April2023Nr8(), TagsMerged_Nr05_Nr08()}
         };
 
     [Theory]

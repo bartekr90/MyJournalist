@@ -59,13 +59,13 @@ public class TagManager : ITagManager
         if (records == null || records.Count == 0)
             return new List<Tag>();
 
-        List<Tag> primaryTags = records.FirstOrDefault().Tags?.ToList() ?? new List<Tag>();
+        List<Tag> tags =  new List<Tag>();
 
         foreach (Record record in records)
         {
-            primaryTags = MergeTags(primaryTags, record.Tags);
+            tags = MergeTags(tags, record.Tags);
         }
-        return primaryTags;
+        return tags;
     }
 
     private bool CheckFileExists()

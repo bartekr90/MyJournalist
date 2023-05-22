@@ -1,4 +1,6 @@
 using MyJournalist.Domain.Entity;
+using System.Xml.Linq;
+using Xunit;
 
 namespace MyJournalist.App.Tests;
 
@@ -449,7 +451,8 @@ internal class SampleLists
     }
     public static string ContentMergedMarch2023TagsTokensNr5 =>
         $"{contentArrayWithTags[0]}\n***\n{contentArrayWithTags[1]}\n***\n{contentArrayWithTags[2]}\n***\n{contentArrayWithTags[3]}\n***\n";
-    public static List<Tag> TagsMergedMarch2023TokensNr5()
+
+    public static List<Tag> TagsMarch2023TokensNr5()
     {
         List<Tag> list = new List<Tag>();
 
@@ -474,6 +477,31 @@ internal class SampleLists
 
         return list;
     }
+    public static List<Tag> TagsMergedMarch2023TokensNr5()
+    {
+        List<Tag> list = new List<Tag>();
+
+        for (int i = 0; i < 3; i++)
+        {
+            Tag tag = new Tag
+            {
+                Id = i + 1 + 5,
+                CreatedById = i + 1,
+                CreatedDateTime = tupleArray[29 + i].Item2,
+                ModifiedById = i + 1,
+                ModifiedDateTime = tupleArray[29 + i].Item2,
+                ContentDate = tupleArray[29 + i].Item1,
+                TimeTokens = i == 0 ? 6u : 3u,
+                IdOfInitialRecord = i + 1 + 5,
+                NameOfInitialRecord = "Rec_From_05march_list5",
+                Name = tagsArray[i],
+            };
+
+            list.Add(tag);
+        }
+
+        return list;
+    }
 
     //******************************************************************************************************
     public static List<Domain.Entity.Record> RecordList01April2023TagsNr6()
@@ -484,7 +512,7 @@ internal class SampleLists
         {
             var record = new Domain.Entity.Record
             {
-                Id = i + 1 + 6,
+                Id = i + 1 + 9,
                 CreatedById = i + 1,
                 CreatedDateTime = tupleArray[33 + i].Item2,
                 ModifiedById = i + 1,
@@ -498,7 +526,7 @@ internal class SampleLists
             };
             var tag = new Tag
             {
-                Id = i + 1 + 6,
+                Id = i + 1 + 9,
                 CreatedById = i + 1,
                 CreatedDateTime = tupleArray[33 + i].Item2,
                 ModifiedById = i + 1,
@@ -580,7 +608,8 @@ internal class SampleLists
     }
     public static string ContentMerged02April2023TagsNr7 =>
         $"{contentArrayWithTags[8]}\n***\n{contentArrayWithTags[9]}\n***\n{contentArrayWithTags[10]}\n***\n{contentArrayWithTags[11]}\n***\n";
-    public static List<Tag> TagsMerged02April2023Nr7()
+
+    public static List<Tag> Tags02April2023Nr7()
     {
         List<Tag> list = new List<Tag>();
 
@@ -602,6 +631,52 @@ internal class SampleLists
         }
         return list;
     }
+    public static List<Tag> TagsMerged02April2023Nr7 =>
+        new List<Tag>
+        {
+            new Tag
+            {
+                ContentDate = tupleArray[37].Item1,
+                CreatedById = 1,
+                CreatedDateTime = tupleArray[37].Item2,
+                Id = 8,
+                IdOfInitialRecord = 8,
+                ModifiedById = 1,
+                ModifiedDateTime = tupleArray[37].Item2,
+                Name = "przyk³ad",
+                NameOfInitialRecord = "Rec_From_02April_list7",
+                Records = null,
+                TimeTokens = 0u
+            },
+             new Tag
+            {
+                ContentDate = tupleArray[38].Item1,
+                CreatedById = 2,
+                CreatedDateTime =tupleArray[38].Item2,
+                Id = 9,
+                IdOfInitialRecord = 9,
+                ModifiedById = 2,
+                ModifiedDateTime = tupleArray[38].Item2,
+                Name = "tekst",
+                NameOfInitialRecord = "Rec_From_02April_list7",
+                Records = null,
+                TimeTokens = 0u
+            },
+             new Tag
+            {
+                ContentDate = tupleArray[40].Item1,
+                CreatedById = 4,
+                CreatedDateTime = tupleArray[40].Item2,
+                Id = 11,
+                IdOfInitialRecord = 11,
+                ModifiedById = 4,
+                ModifiedDateTime = tupleArray[40].Item2,
+                Name = "opis",
+                NameOfInitialRecord = "Rec_From_02April_list7",
+                Records = null,
+                TimeTokens = 0u
+            }
+        };
 
     //******************************************************************************************************
     public static List<Domain.Entity.Record> RecordList03April2023TagsNr8()
@@ -612,7 +687,7 @@ internal class SampleLists
         {
             var record = new Domain.Entity.Record
             {
-                Id = i + 1 + 8,
+                Id = i + 1 + 17,
                 CreatedById = i + 1,
                 CreatedDateTime = tupleArray[41 + i].Item2,
                 ModifiedById = i + 1,
@@ -622,11 +697,12 @@ internal class SampleLists
                 HasContent = true,
                 HasAnyTags = true,
                 Tags = new List<Tag>(),
-                Content = contentArrayWithTags[12 + i]
+                Content = contentArrayWithTags[12 + i],
+                TimeTokens = 5
             };
             var tag = new Tag
             {
-                Id = i + 1 + 8,
+                Id = i + 1 + 17,
                 CreatedById = i + 1,
                 CreatedDateTime = tupleArray[41 + i].Item2,
                 ModifiedById = i + 1,
@@ -635,6 +711,7 @@ internal class SampleLists
                 IdOfInitialRecord = i + 1 + 8,
                 NameOfInitialRecord = "Rec_From_03April_list8",
                 Name = tagsArray[12 + i],
+                TimeTokens = 5
             };
             record.Tags.Add(tag);
             list.Add(record);
@@ -707,7 +784,7 @@ internal class SampleLists
     }
     public static string ContentMerged04April2023TagsNr9 =>
         $"{contentArrayWithTags[16]}\n***\n{contentArrayWithTags[17]}\n***\n{contentArrayWithTags[18]}\n***\n{contentArrayWithTags[19]}\n***\n";
-    public static List<Tag> TagsMerged04April2023Nr9()
+    public static List<Tag> Tags04April2023Nr9()
     {
         List<Tag> list = new List<Tag>();
 
@@ -729,6 +806,52 @@ internal class SampleLists
         }
         return list;
     }
+    public static List<Tag> TagsMerged04April2023Nr9 =>
+        new List<Tag>
+        {
+            new Tag
+            {
+                ContentDate = tupleArray[45].Item1,
+                CreatedById = 1,
+                CreatedDateTime = tupleArray[45].Item2,
+                Id = 10,
+                IdOfInitialRecord = 10,
+                ModifiedById = 1,
+                ModifiedDateTime = tupleArray[45].Item2,
+                Name = "opis",
+                NameOfInitialRecord = "Rec_From_04April_list9",
+                Records = null,
+                TimeTokens = 0u
+            },
+            new Tag
+            {
+                ContentDate = tupleArray[47].Item1,
+                CreatedById = 3,
+                CreatedDateTime = tupleArray[47].Item2,
+                Id = 12,
+                IdOfInitialRecord = 12,
+                ModifiedById = 3,
+                ModifiedDateTime = tupleArray[47].Item2,
+                Name = "pierwszy",
+                NameOfInitialRecord = "Rec_From_04April_list9",
+                Records = null,
+                TimeTokens = 0u
+            },
+            new Tag
+            {
+                ContentDate = tupleArray[48].Item1,
+                CreatedById = 4,
+                CreatedDateTime = tupleArray[48].Item2,
+                Id = 13,
+                IdOfInitialRecord = 13,
+                ModifiedById = 4,
+                ModifiedDateTime = tupleArray[48].Item2,
+                Name = "trzeci",
+                NameOfInitialRecord = "Rec_From_04April_list9",
+                Records = null,
+                TimeTokens = 0u
+            }
+        };    
 
     //******************************************************************************************************
     public static List<DailyRecordsSet> DailyRecordsSetsListNr1()
@@ -853,7 +976,7 @@ internal class SampleLists
             HasAnyRecords = true,
             MergedContents = contentArray[4],
             RefersToDate = tupleArray[29].Item1, // refers to date to data ContentDate.Date recordu!
-            MergedTags = TagsMergedMarch2023TokensNr5(),
+            MergedTags = TagsMarch2023TokensNr5(),
             HasAnyTags = true,
             EmailHasBeenSent = false
         };
@@ -889,9 +1012,9 @@ internal class SampleLists
         List<Tag>[] tagArray =
         {
             TagsMerged01April2023Nr6(),
-            TagsMerged02April2023Nr7(),
+            Tags02April2023Nr7(),
             TagsMerged03April2023Nr8(),
-            TagsMerged04April2023Nr9(),
+            Tags04April2023Nr9(),
         };
 
         var list = new List<DailyRecordsSet>();
@@ -926,7 +1049,7 @@ internal class SampleLists
         DailyRecordsSetsListAprilNr2().Where(r => r.Id > 3 && r.Id <= 5).ToList();
     public static List<DailyRecordsSet> DailyRecordsSetsListAprilNr2Id_3_5 =>
         DailyRecordsSetsListAprilNr2().Where(r => r.Id > 2 && r.Id <= 5).ToList();
-   
+
     //*******************************************************************************************************
     public static List<Tag> TagsMerged_Nr06_Nr07()
     {

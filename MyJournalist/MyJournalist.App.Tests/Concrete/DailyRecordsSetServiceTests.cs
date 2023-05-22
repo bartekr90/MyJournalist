@@ -162,11 +162,11 @@ public class DailyRecordsSetServiceTests
         new TheoryData<List<Domain.Entity.Record>, string, List<Tag>, Tuple<DateTimeOffset, DateTimeOffset>>
         {
             {RecordsListNr1(), GetMergedContentNr1, GetTagListNr1(), GetDateSetDiff1Day },
-            {RecordListMarch2023TagsTokensNr5(), ContentMergedMarch2023TagsTokensNr5, TagsMergedMarch2023TokensNr5(), tupleArray[32]},
+            {RecordListMarch2023TagsTokensNr5(), ContentMergedMarch2023TagsTokensNr5, TagsMarch2023TokensNr5(), tupleArray[32]},
             {RecordList01April2023TagsNr6(), ContentMerged01April2023TagsNr6, TagsMerged01April2023Nr6(), tupleArray[33]},
-            {RecordList02April2023TagsNr7(), ContentMerged02April2023TagsNr7, TagsMerged02April2023Nr7(), tupleArray[37]},
+            {RecordList02April2023TagsNr7(), ContentMerged02April2023TagsNr7, Tags02April2023Nr7(), tupleArray[37]},
             {RecordList03April2023TagsNr8(), ContentMerged03April2023TagsNr8, TagsMerged03April2023Nr8(), tupleArray[41]},
-            {RecordList04April2023TagsNr9(), ContentMerged04April2023TagsNr9, TagsMerged04April2023Nr9(), tupleArray[45]}
+            {RecordList04April2023TagsNr9(), ContentMerged04April2023TagsNr9, Tags04April2023Nr9(), tupleArray[45]}
         };
 
     [Theory]

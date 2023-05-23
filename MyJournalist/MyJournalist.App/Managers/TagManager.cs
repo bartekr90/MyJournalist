@@ -18,7 +18,7 @@ public class TagManager : ITagManager
         _tagService = tagService;
     }
 
-    public void MergeAndSaveTagsInFile(ICollection<Tag> tags)
+    public void MergedTagsSave(ICollection<Tag> tags)
     {
         LoadTagsFromFile();
 
@@ -54,7 +54,7 @@ public class TagManager : ITagManager
         return tags;
     }
 
-    public List<Tag> MergeTagsFromRecordList(List<Record> records)
+    public List<Tag> MergeTagsFromRecords(List<Record> records)
     {
         if (records == null || records.Count == 0)
             return new List<Tag>();

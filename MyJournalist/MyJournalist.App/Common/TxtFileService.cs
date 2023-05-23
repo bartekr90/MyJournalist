@@ -37,7 +37,7 @@ public class TxtFileService : ITxtFileService
             throw new Exception($"An unexpected error occurred while accessing file {_filePath}", ex);
         }
     }
-    public DateTimeOffset GetGetLastWriteTime()
+    public DateTimeOffset GetLastWriteTime()
     {
         try
         {

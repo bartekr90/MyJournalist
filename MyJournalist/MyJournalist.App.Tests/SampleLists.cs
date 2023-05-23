@@ -1,6 +1,4 @@
 using MyJournalist.Domain.Entity;
-using System.Xml.Linq;
-using Xunit;
 
 namespace MyJournalist.App.Tests;
 
@@ -851,7 +849,7 @@ internal class SampleLists
                 Records = null,
                 TimeTokens = 0u
             }
-        };    
+        };
 
     //******************************************************************************************************
     public static List<DailyRecordsSet> DailyRecordsSetsListNr1()
@@ -989,6 +987,10 @@ internal class SampleLists
         DailyRecordsSetsMarch2023Nr1().Single(r => r.Id == 3);
     public static DailyRecordsSet DailyRecordsSetsMarch2023Nr1Id_5 =>
         DailyRecordsSetsMarch2023Nr1().Single(r => r.Id == 5);
+    public static List<Domain.Entity.Record> CombinedListsFromNr1ToNr5 =>
+        RecordListMarch2023nr1().Concat(RecordListMarch2023nr2()).Concat(RecordListMarch2023nr3()).Concat(RecordListMarch2023nr4()).Concat(RecordListMarch2023TagsTokensNr5()).ToList();
+    public static List<Domain.Entity.Record> CombinedListsFromNr2ToNr5 =>
+        RecordListMarch2023nr2().Concat(RecordListMarch2023nr3()).Concat(RecordListMarch2023nr4()).Concat(RecordListMarch2023TagsTokensNr5()).ToList();
 
     //******************************************************************************************************
     public static List<DailyRecordsSet> DailyRecordsSetsListAprilNr2()
@@ -1049,7 +1051,10 @@ internal class SampleLists
         DailyRecordsSetsListAprilNr2().Where(r => r.Id > 3 && r.Id <= 5).ToList();
     public static List<DailyRecordsSet> DailyRecordsSetsListAprilNr2Id_3_5 =>
         DailyRecordsSetsListAprilNr2().Where(r => r.Id > 2 && r.Id <= 5).ToList();
-
+    public static List<Domain.Entity.Record> CombinedListsFromNr6ToNr9 =>
+        RecordList01April2023TagsNr6().Concat(RecordList02April2023TagsNr7()).Concat(RecordList03April2023TagsNr8()).Concat(RecordList04April2023TagsNr9()).ToList();
+    public static List<Domain.Entity.Record> CombinedListsFromNr7ToNr9 =>
+        RecordList02April2023TagsNr7().Concat(RecordList03April2023TagsNr8()).Concat(RecordList04April2023TagsNr9()).ToList();
     //*******************************************************************************************************
     public static List<Tag> TagsMerged_Nr06_Nr07()
     {

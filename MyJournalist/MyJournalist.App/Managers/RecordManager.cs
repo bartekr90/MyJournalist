@@ -23,7 +23,7 @@ public class RecordManager : IRecordManager
 
     public string GetDataFromTxt()
     {
-        _dateTimeProvider.DateOfContent = _txtService.GetGetLastWriteTime();
+        _dateTimeProvider.DateOfContent = _txtService.GetLastWriteTime();
         return _txtService.ReadData();
     }
     public Record GetRecord(string contentFromTxt, ICollection<Tag> tags)
@@ -47,6 +47,8 @@ public class RecordManager : IRecordManager
 
     public void SaveListInFile(List<Record> listToSave)
     {
+        if (listToSave == null) return;
+
         if (listToSave.Count > 0)
         {
             _fileService.ClearFile(_recordService.GetFileName());
@@ -56,6 +58,9 @@ public class RecordManager : IRecordManager
 
     public void SaveRecordInFile(Record record)
     {
+        if (record == null) 
+            return;
+
         LoadRecordsFromFile();
         List<Record> list = _recordService.GetAllItems();
         list.Add(record);
@@ -64,56 +69,29 @@ public class RecordManager : IRecordManager
         _fileService.UpdateFile(list, _recordService.GetFileName());
     }
 
-    public void ClearTxt()
-    {
-        _txtService.ClearData();
-    }
+    public void ClearTxt() => _txtService.ClearData();
 
-    public List<Record> FindPastDateRecords(ICollection<Record> list, DateTimeOffset compareDate)
-    {
-        var records = list
-           .Where(r => r.ContentDate.Date != compareDate.Date)
-           .ToList();
+    public List<Record> FindPastDateRecords(ICollection<Record> list, DateTimeOffset compareDate) =>
+         list.Where(r => r.ContentDate.Date != compareDate.Date).ToList();
 
-        return records;
-    }
+    public List<Record> FindEqualDateRecords(ICollection<Record> list, DateTimeOffset compareDate) =>
+        list.Where(r => r.ContentDate.Date == compareDate.Date).ToList();
 
-    public List<Record> FindEqualDateRecords(ICollection<Record> list, DateTimeOffset compareDate)
-    {
-        var records = list
-            .Where(r => r.ContentDate.Date == compareDate.Date)
-            .ToList();
+    public List<Record> GetRecordsWithContent(List<Record> group) =>
+         group.Where(r => r.HasContent == true).ToList();
 
-        return records;
-    }
-    public IEnumerable<IGrouping<DateTime, Record>> GroupRecordsByDate(ICollection<Record> records)
-    {
-        IEnumerable<IGrouping<DateTime, Record>> recordsByDate = records.GroupBy(r => r.ContentDate.Date);
-        return recordsByDate;
-    }
-
-    public List<Record> GeRecordsWithContent(List<Record> group)
-    {
-        List<Record> list = group
-        .Where(r => r.HasContent == true)
-        .ToList();
-        return list;
-    }
+    public IEnumerable<IGrouping<DateTime, Record>> GroupRecordsByDate(ICollection<Record> records) =>
+        records.GroupBy(r => r.ContentDate.Date);         
 
     public void LoadRecordsFromFile()
     {
-        if (CheckFileExists())
+        if (_fileService.CheckFileExists(_recordService.GetFileName()))
         {
             var list = _fileService.ReadFile(_recordService.GetFileName()).ToList() ?? new List<Record>();
             _recordService.SetItems(list);
         }
         else
             _fileService.CreateFile(_recordService.GetFileName());
-    }
-    private bool CheckFileExists()
-    {
-        return _fileService.CheckFileExists(_recordService.GetFileName());
-    }
-
+    }   
 }
 

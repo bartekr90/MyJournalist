@@ -18,14 +18,14 @@ public class TagManagerTests
     }
 
     [Fact]
-    public void MargeAndSaveTagsInFile_ShouldCallUpdateFileAndClearFile()
+    public void MergedTagsSave_ShouldCallUpdateFileAndClearFile()
     {
         // Arrange
         var fileMock = _fileServiceMock.Object;
         var tagMock = _tagServiceMock.Object;
 
         // Act
-        _sut.MergeAndSaveTagsInFile(TagsMerged03April2023Nr8());
+        _sut.MergedTagsSave(TagsMerged03April2023Nr8());
 
         // Assert
         _fileServiceMock.Verify(f => f.UpdateFile(It.IsAny<ICollection<Tag>>(), tagMock.GetFileName()), Times.Once);
@@ -125,7 +125,7 @@ public class TagManagerTests
         List<Domain.Entity.Record> records = null;
 
         // Act
-        List<Tag> result = _sut.MergeTagsFromRecordList(records);
+        List<Tag> result = _sut.MergeTagsFromRecords(records);
 
         // Assert
         result.Should().BeEmpty();
@@ -138,7 +138,7 @@ public class TagManagerTests
         List<Domain.Entity.Record> records = new List<Domain.Entity.Record>();
 
         // Act
-        List<Tag> result = _sut.MergeTagsFromRecordList(records);
+        List<Tag> result = _sut.MergeTagsFromRecords(records);
 
         // Assert
         result.Should().BeEmpty();
@@ -185,7 +185,7 @@ public class TagManagerTests
         _tagServiceMock.Setup(t => t.MakeUnion(It.IsAny<ICollection<Tag>>(), It.IsAny<ICollection<Tag>>()));
 
         // Act
-        List<Tag> result = _sut.MergeTagsFromRecordList(records);
+        List<Tag> result = _sut.MergeTagsFromRecords(records);
 
         // Assert
         _tagServiceMock.Verify(x => x.MakeUnion(It.IsAny<ICollection<Tag>>(), It.IsAny<ICollection<Tag>>()), Times.Exactly(2));
@@ -234,7 +234,7 @@ public class TagManagerTests
         TagManager tagManager = new TagManager(_dateTimeProviderMock.Object, _fileServiceMock.Object, tagService);
 
         // Act
-        List<Tag> result = tagManager.MergeTagsFromRecordList(records);
+        List<Tag> result = tagManager.MergeTagsFromRecords(records);
 
         // Assert
         result.Should().BeEquivalentTo(expectedMergedTags);
@@ -259,7 +259,7 @@ public class TagManagerTests
         TagManager tagManager = new TagManager(_dateTimeProviderMock.Object, _fileServiceMock.Object, tagService);
 
         // Act
-        List<Tag> result = tagManager.MergeTagsFromRecordList(records);
+        List<Tag> result = tagManager.MergeTagsFromRecords(records);
 
         // Assert
         result.Should().BeEquivalentTo(expected);

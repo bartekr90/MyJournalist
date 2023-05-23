@@ -3,6 +3,6 @@
 public interface ITxtFileService
 {
     void ClearData();
-    DateTimeOffset GetGetLastWriteTime();
+    DateTimeOffset GetLastWriteTime();
     string ReadData();
 }

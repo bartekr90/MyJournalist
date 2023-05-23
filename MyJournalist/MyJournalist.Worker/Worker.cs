@@ -67,9 +67,9 @@ public class Worker : BackgroundService
 
             foreach (IGrouping<DateTime, Record> group in recordsGroupedByMonth)
             {
-                List<Record> fullRecords = _recordManager.GeRecordsWithContent(group.ToList());
+                List<Record> fullRecords = _recordManager.GetRecordsWithContent(group.ToList());
                 _dailyRecordsSetManager.SetDateForService(group.Key);
-                List<Tag> tagsForDailySet = _tagManager.MergeTagsFromRecordList(fullRecords);
+                List<Tag> tagsForDailySet = _tagManager.MergeTagsFromRecords(fullRecords);
                 DailyRecordsSet dailyRecordSet = _dailyRecordsSetManager.GetDailyRecordsSet(fullRecords, tagsForDailySet);
                 newDailyRecordsSetsList.Add(dailyRecordSet);
                 tagsToSave = _tagManager.MergeTags(tagsToSave, tagsForDailySet);
@@ -86,7 +86,7 @@ public class Worker : BackgroundService
         List<Record> presentRecords = _recordManager.FindEqualDateRecords(recordsList, _dateTimeProvider.Now);
         _recordManager.ClearTxt();
         _recordManager.SaveListInFile(presentRecords);
-        _tagManager.MergeAndSaveTagsInFile(tagsToSave);
+        _tagManager.MergedTagsSave(tagsToSave);
 
     }
 }

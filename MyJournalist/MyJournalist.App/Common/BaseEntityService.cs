@@ -15,7 +15,7 @@ public class BaseEntityService<T> : IEntityService<T> where T : BaseEntity, new(
 
     public List<T> GetAllItems()
     {
-        return Items;
+        return Items.ToList();
     }
 
     public void SetItems(List<T> list)

@@ -1,9 +1,7 @@
 ﻿using MyJournalist.App.Abstract;
-using MyJournalist.App.Common;
 using MyJournalist.App.Concrete;
 using MyJournalist.App.Managers;
 using MyJournalist.Domain.Entity;
-using Xunit;
 
 namespace MyJournalist.App.Tests.Managers;
 
@@ -441,9 +439,9 @@ public class RecordManagerTests
         _sut.SaveRecordInFile(record);
 
         // Assert
-        _recordServiceMock.Verify(s => s.GetAllItems(), Times.Never); 
-        _fileServiceMock.Verify(s => s.ClearFile(It.IsAny<string>()), Times.Never); 
-        _fileServiceMock.Verify(s => s.UpdateFile(It.IsAny<List<Domain.Entity.Record>>(), It.IsAny<string>()), Times.Never); 
+        _recordServiceMock.Verify(s => s.GetAllItems(), Times.Never);
+        _fileServiceMock.Verify(s => s.ClearFile(It.IsAny<string>()), Times.Never);
+        _fileServiceMock.Verify(s => s.UpdateFile(It.IsAny<List<Domain.Entity.Record>>(), It.IsAny<string>()), Times.Never);
     }
 
     [Fact]
@@ -462,8 +460,8 @@ public class RecordManagerTests
         _sut.SaveListInFile(listToSave);
 
         // Assert
-        _fileServiceMock.Verify(s => s.ClearFile(fileName), Times.Once); 
-        _fileServiceMock.Verify(s => s.UpdateFile(listToSave, fileName), Times.Once); 
+        _fileServiceMock.Verify(s => s.ClearFile(fileName), Times.Once);
+        _fileServiceMock.Verify(s => s.UpdateFile(listToSave, fileName), Times.Once);
     }
 
     [Fact]
@@ -476,8 +474,8 @@ public class RecordManagerTests
         _sut.SaveListInFile(listToSave);
 
         // Assert
-        _fileServiceMock.Verify(s => s.ClearFile(It.IsAny<string>()), Times.Never); 
-        _fileServiceMock.Verify(s => s.UpdateFile(It.IsAny<List<Domain.Entity.Record>>(), It.IsAny<string>()), Times.Never); 
+        _fileServiceMock.Verify(s => s.ClearFile(It.IsAny<string>()), Times.Never);
+        _fileServiceMock.Verify(s => s.UpdateFile(It.IsAny<List<Domain.Entity.Record>>(), It.IsAny<string>()), Times.Never);
     }
 
     [Fact]
@@ -490,8 +488,8 @@ public class RecordManagerTests
         _sut.SaveListInFile(listToSave);
 
         // Assert
-        _fileServiceMock.Verify(s => s.ClearFile(It.IsAny<string>()), Times.Never); 
-        _fileServiceMock.Verify(s => s.UpdateFile(It.IsAny<List<Domain.Entity.Record>>(), It.IsAny<string>()), Times.Never); 
+        _fileServiceMock.Verify(s => s.ClearFile(It.IsAny<string>()), Times.Never);
+        _fileServiceMock.Verify(s => s.UpdateFile(It.IsAny<List<Domain.Entity.Record>>(), It.IsAny<string>()), Times.Never);
     }
 
     [Fact]
@@ -510,10 +508,10 @@ public class RecordManagerTests
         _sut.LoadRecordsFromFile();
 
         // Assert
-        _fileServiceMock.Verify(s => s.CheckFileExists(It.IsAny<string>()), Times.Once); 
-        _fileServiceMock.Verify(s => s.ReadFile(It.IsAny<string>()), Times.Once); 
-        _recordServiceMock.Verify(s => s.SetItems(recordsFromFile), Times.Once); 
-        _fileServiceMock.Verify(s => s.CreateFile(It.IsAny<string>()), Times.Never); 
+        _fileServiceMock.Verify(s => s.CheckFileExists(It.IsAny<string>()), Times.Once);
+        _fileServiceMock.Verify(s => s.ReadFile(It.IsAny<string>()), Times.Once);
+        _recordServiceMock.Verify(s => s.SetItems(recordsFromFile), Times.Once);
+        _fileServiceMock.Verify(s => s.CreateFile(It.IsAny<string>()), Times.Never);
     }
 
     [Fact]
@@ -544,191 +542,242 @@ public class RecordManagerTests
         _sut.LoadRecordsFromFile();
 
         // Assert
-        _fileServiceMock.Verify(s => s.ReadFile(It.IsAny<string>()), Times.Never); 
-        _fileServiceMock.Verify(s => s.CheckFileExists(It.IsAny<string>()), Times.Once); 
-        _recordServiceMock.Verify(s => s.SetItems(It.IsAny<List<Domain.Entity.Record>>()), Times.Never); 
-        _fileServiceMock.Verify(s => s.CreateFile(It.IsAny<string>()), Times.Once);       
+        _fileServiceMock.Verify(s => s.ReadFile(It.IsAny<string>()), Times.Never);
+        _fileServiceMock.Verify(s => s.CheckFileExists(It.IsAny<string>()), Times.Once);
+        _recordServiceMock.Verify(s => s.SetItems(It.IsAny<List<Domain.Entity.Record>>()), Times.Never);
+        _fileServiceMock.Verify(s => s.CreateFile(It.IsAny<string>()), Times.Once);
     }
 
-    //[Fact]
-    //public void GetRecord_ShouldReturnEmptyObj_WhenContentFromTxtIsNullOrWhiteSpace()
-    //{
-    //    // Arrange
-    //    var recordManager = new RecordManager(_dateTimeProvider, _txtService, _fileService, _recordService);
-    //    string contentFromTxt = null;
-    //    var tags = new List<Tag> { /* tags */ };
-    //    var expectedRecord = new Record();
-    //    _recordService.GetEmptyObj(_dateTimeProvider).Returns(expectedRecord);
+    [Fact]
+    public void MakeNewRecordList_ShouldAddRecordToList_WhenFileExist()
+    {
+        // Arrange
+        var record = new Domain.Entity.Record { Name = "Test", Content = "Test content" };
+        var existingRecords = new List<Domain.Entity.Record>
+        {
+            new Domain.Entity.Record { Name = "Record 1", Content = "Content 1" },
+            new Domain.Entity.Record { Name = "Record 2", Content = "Content 2" }
+        };
+        _fileServiceMock.Setup(f => f.CheckFileExists(It.IsAny<string>())).Returns(true);
+        _fileServiceMock.Setup(f => f.ReadFile(It.IsAny<string>())).Returns(existingRecords);
 
-    //    // Act
-    //    var result = recordManager.GetRecord(contentFromTxt, tags);
+        RecordService service = new RecordService();
+        RecordManager manager = new RecordManager(_dateTimeProviderMock.Object, _txtFileServiceMock.Object, _fileServiceMock.Object, service);
 
-    //    // Assert
-    //    result.Should().Be(expectedRecord);
-    //}
+        // Act
+        var result = manager.MakeNewRecordList(record);
 
-    //[Fact]
-    //public void GetRecord_ShouldReturnRecordFromContent_WhenContentFromTxtIsValid()
-    //{
-    //    // Arrange
-    //    var recordManager = new RecordManager(_dateTimeProvider, _txtService, _fileService, _recordService);
-    //    var contentFromTxt = "Sample content";
-    //    var tags = new List<Tag> { /* tags */ };
-    //    var expectedRecord = new Record();
-    //    _recordService.GetRecordFromContent(contentFromTxt, tags, _dateTimeProvider).Returns(expectedRecord);
+        // Assert
+        service.Items.Should().HaveCount(2);
+        result.Should().NotBeNull();
+        result.Should().HaveCount(existingRecords.Count + 1);
+        result.Should().Contain(record);
+        result.Should().Contain(existingRecords);
+    }
 
-    //    // Act
-    //    var result = recordManager.GetRecord(contentFromTxt, tags);
+    [Fact]
+    public void MakeNewRecordList_ShouldAddRecordToList_WhenFileDontExist()
+    {
+        // Arrange
+        var record = new Domain.Entity.Record { Name = "Test", Content = "Test content" };
+        _fileServiceMock.Setup(f => f.CheckFileExists(It.IsAny<string>())).Returns(false);
 
-    //    // Assert
-    //    result.Should().Be(expectedRecord);
-    //}
+        RecordService service = new RecordService();
+        RecordManager manager = new RecordManager(_dateTimeProviderMock.Object, _txtFileServiceMock.Object, _fileServiceMock.Object, service);
 
+        // Act
+        var result = manager.MakeNewRecordList(record);
 
-    //[Fact]
-    //public void GetRecord_ShouldReturnEmptyRecord_WhenContentFromTxtIsNullOrWhiteSpace()
-    //{
-    //    // Arrange
-    //    var recordManager = new RecordManager(_dateTimeProvider, _txtService, _fileService, _recordService);
-    //    var tags = new List<Tag>();
+        // Assert
+        service.Items.Should().BeEmpty();
+        result.Should().NotBeNull();
+        result.Should().HaveCount(1);
+        result.Should().Contain(record);
+    }
 
-    //    // Act
-    //    var result = recordManager.GetRecord(null, tags);
+    [Fact]
+    public void MakeNewRecordList_ShouldReturnEmptyList_WhenNoExistingRecords()
+    {
+        // Arrange
+        var record = new Domain.Entity.Record { Name = "Test", Content = "Test content" };
+        var existingRecords = new List<Domain.Entity.Record>();
 
-    //    // Assert
-    //    result.Should().BeEquivalentTo(_recordService.GetEmptyObj(_dateTimeProvider));
-    //}
+        _recordServiceMock.Setup(rs => rs.GetAllItems()).Returns(existingRecords);
 
-    //[Fact]
-    //public void GetRecord_ShouldReturnRecordFromContent_WhenContentFromTxtIsNotNullOrWhiteSpace()
-    //{
-    //    // Arrange
-    //    var recordManager = new RecordManager(_dateTimeProvider, _txtService, _fileService, _recordService);
-    //    var contentFromTxt = "Sample content";
-    //    var tags = new List<Tag>();
+        // Act
+        var result = _sut.MakeNewRecordList(record);
 
-    //    // Act
-    //    var result = recordManager.GetRecord(contentFromTxt, tags);
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().HaveCount(1);
+        result.Should().Contain(record);
+    }
 
-    //    // Assert
-    //    result.Should().BeEquivalentTo(_recordService.GetRecordFromContent(contentFromTxt, tags, _dateTimeProvider));
-    //}
-    //[Fact]
-    //public void MakeNewRecordList_ShouldAddRecordToList()
-    //{
-    //    // Arrange
-    //    var recordManager = new RecordManager(_dateTimeProvider, _txtService, _fileService, _recordService);
-    //    var record = new Record();
-    //    var initialList = new List<Record> { /* initial records */ };
-    //    _recordService.GetAllItems().Returns(initialList);
+    [Fact]
+    public void MakeNewRecordList_ShouldReturnSameList_WhenRecordIsNull()
+    {
+        // Arrange
+        var existingRecords = new List<Domain.Entity.Record>
+    {
+        new Domain.Entity.Record { Name = "Record 1", Content = "Content 1" },
+        new Domain.Entity.Record { Name = "Record 2", Content = "Content 2" }
+    };
 
-    //    // Act
-    //    var result = recordManager.MakeNewRecordList(record);
+        _recordServiceMock.Setup(rs => rs.GetAllItems()).Returns(existingRecords);
 
-    //    // Assert
-    //    result.Should().Contain(record);
-    //    result.Should().HaveCount(initialList.Count + 1);
-    //}
+        // Act
+        var result = _sut.MakeNewRecordList(null);
 
-    //[Fact]
-    //public void SaveListInFile_ShouldClearAndSaveListToFile_WhenListHasItems()
-    //{
-    //    // Arrange
-    //    var recordManager = new RecordManager(_dateTimeProvider, _txtService, _fileService, _recordService);
-    //    var listToSave = new List<Record> { /* records to save */ };
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(existingRecords);
+    }
 
-    //    // Act
-    //    recordManager.SaveListInFile(listToSave);
+    [Fact]
+    public void GetRecord_ShouldReturnEmptyObj_WhenContentFromTxtIsNullOrWhiteSpace()
+    {
+        // Arrange
+        string contentFromTxt = null;
+        _recordServiceMock.Setup(r => r.GetEmptyObj(_dateTimeProviderMock.Object)).Returns(new Domain.Entity.Record());
 
-    //    // Assert
-    //    _fileService.Received(1).ClearFile(_recordService.GetFileName());
-    //    _fileService.Received(1).UpdateFile(listToSave, _recordService.GetFileName());
-    //}
+        // Act
+        Domain.Entity.Record result = _sut.GetRecord(contentFromTxt, null);
 
-    //[Fact]
-    //public void SaveListInFile_ShouldNotClearOrSaveListToFile_WhenListIsEmpty()
-    //{
-    //    // Arrange
-    //    var recordManager = new RecordManager(_dateTimeProvider, _txtService, _fileService, _recordService);
-    //    var listToSave = new List<Record>();
+        // Assert
+        result.Should().NotBeNull();
+        _recordServiceMock.Verify(x => x.GetEmptyObj(_dateTimeProviderMock.Object), Times.Once);
+    }
 
-    //    // Act
-    //    recordManager.SaveListInFile(listToSave);
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void GetRecord_ShouldReturnEmptyObj_WhenTagsEmpty(string contentFromTxt)
+    {
+        // Arrange
+        var provider = _dateTimeProviderMock.Object;
+        _dateTimeProviderMock.Setup(dp => dp.Now).Returns(tupleArray[13].Item2);
+        _dateTimeProviderMock.Setup(dp => dp.DateOfContent).Returns(tupleArray[13].Item1);
 
-    //    // Assert
-    //    _fileService.DidNotReceive().ClearFile(_recordService.GetFileName());
-    //    _fileService.DidNotReceive().UpdateFile(listToSave, _recordService.GetFileName());
-    //}
+        RecordService service = new RecordService();
+        RecordManager manager = new RecordManager(_dateTimeProviderMock.Object, _txtFileServiceMock.Object, _fileServiceMock.Object, service);
 
+        // Act
+        Domain.Entity.Record result = manager.GetRecord(contentFromTxt, new List<Tag>());
 
+        // Assert
+        result.Should().NotBeNull();
 
-    //[Fact]
-    //public void ClearTxt_ShouldClearDataFromTxtService()
-    //{
-    //    // Arrange
-    //    var recordManager = new RecordManager(_dateTimeProvider, _txtService, _fileService, _recordService);
+        result.Should().NotBeNull();
+        result.Id.Should().Be(0);
+        result.ContentDate.Should().Be(provider.DateOfContent);
+        result.Content.Should().Be("[no content]");
+        result.HasAnyTags.Should().BeFalse();
+        result.HasContent.Should().BeFalse();
+        result.CreatedDateTime.Should().Be(provider.Now);
+        result.ModifiedDateTime.Should().Be(provider.Now);
+    }
 
-    //    // Act
-    //    recordManager.ClearTxt();
+    public static TheoryData<DateTimeOffset, List<Tag>, uint, string, bool> GetRecord_ShouldReturnRecordFromContent =>
+      new TheoryData<DateTimeOffset, List<Tag>, uint, string, bool>
+      {
+           {new DateTimeOffset(2001, 1, 7, 10, 30, 0, TimeSpan.Zero), TagsMarch2023TokensNr5(), 3, "some content", true},
+           {new DateTimeOffset(9999, 12, 31, 23, 59, 59, TimeSpan.Zero), null, 0, "To jest tekst", false},
+           { new DateTimeOffset(2023, 5, 7, 10, 30, 0, 123, TimeSpan.Zero), new List<Tag>(), 0, "11111", false },
+           { new DateTimeOffset(2023, 5, 7, 0, 0, 0, TimeSpan.Zero), Tags02April2023Nr7(), 0, "someContent", true },
+           { new DateTimeOffset(2023, 5, 7, 23, 59, 59, TimeSpan.Zero), TagsMerged03April2023Nr8(), 5, "no content", true },
+           { new DateTimeOffset(2013, 5, 7, 0, 0, 0, TimeSpan.Zero), new List<Tag>(), 0, "Przykładowy", false },
+      };
 
-    //    // Assert
-    //    _txtService.Received(1).ClearData();
-    //}
+    [Theory]
+    [MemberData(nameof(GetRecord_ShouldReturnRecordFromContent))]
+    public void GetRecord_ShouldReturnRecordFromContent_ForSampleData(DateTimeOffset date,
+                                                                                    List<Tag> tags,
+                                                                                    uint tokens,
+                                                                                    string contentFromTxt,
+                                                                                    bool hasTags)
+    {
+        // Arrange
+        var provider = _dateTimeProviderMock.Object;
+        _dateTimeProviderMock.Setup(dp => dp.Now).Returns(date);
+        _dateTimeProviderMock.Setup(dp => dp.DateOfContent).Returns(date.AddMinutes(-10));
 
+        RecordService service = new RecordService();
+        RecordManager manager = new RecordManager(provider, _txtFileServiceMock.Object, _fileServiceMock.Object, service);
+               
 
+        // Act
+        Domain.Entity.Record result = manager.GetRecord(contentFromTxt, tags);
 
-    //[Fact]
-    //public void FindEqualDateRecords_ShouldReturnRecordsWithSameDate()
-    //{
-    //    // Arrange
-    //    var recordManager = new RecordManager(_dateTimeProvider, _txtService, _fileService, _recordService);
-    //    var list = new List<Record> { /* records */ };
-    //    var compareDate = DateTimeOffset.Parse("2023-05-20");
+        // Assert
+        result.Should().NotBeNull();
+        result.Name.Should().NotBeNullOrWhiteSpace();
+        result.Content.Should().Be(contentFromTxt);
+        result.Content.Should().NotBe("[no content]");
+        result.ContentDate.Should().Be(provider.DateOfContent);
+        result.HasContent.Should().BeTrue();
+        result.HasAnyTags.Should().Be(hasTags);
+        result.Tags.Should().BeEquivalentTo(tags);
+        result.TimeTokens.Should().Be(tokens);
+        result.CreatedDateTime.Should().Be(provider.Now);
+        result.ModifiedDateTime.Should().Be(provider.Now);
+    }
+       
 
-    //    // Act
-    //    var result = recordManager.FindEqualDateRecords(list, compareDate);
+    [Fact]
+    public void GetRecord_ShouldReturnRecordWithEmptyTags_WhenTagsParameterIsNull()
+    {
+        // Arrange
+        string contentFromTxt = "Sample content";
+        _recordServiceMock.Setup(r => r.GetRecordFromContent(contentFromTxt, It.IsAny<ICollection<Tag>>(), _dateTimeProviderMock.Object))
+            .Returns(new Domain.Entity.Record());
 
-    //    // Assert
-    //    result.Should().OnlyContain(record => record.ContentDate.Date == compareDate.Date);
-    //}    
+        // Act
+        Domain.Entity.Record result = _sut.GetRecord(contentFromTxt, null);
 
+        // Assert
+        result.Should().NotBeNull();
+        result.Tags.Should().BeNull();
+        _recordServiceMock.Verify(x => x.GetRecordFromContent(contentFromTxt, It.IsAny<ICollection<Tag>>(), _dateTimeProviderMock.Object), Times.Once);
+    }
 
+    [Fact]
+    public void GetRecord_ShouldReturnRecordWithTimeTokens_WhenContentFromTxtIsNotNullOrWhiteSpace()
+    {
+        // Arrange
+        string contentFromTxt = "Sample content";
+        ICollection<Tag> tags = new List<Tag>();
+        uint timeTokens = 10;
 
+        _recordServiceMock.Setup(x => x.GetRecordFromContent(contentFromTxt, tags, _dateTimeProviderMock.Object))
+            .Returns(new Domain.Entity.Record { TimeTokens = timeTokens });
 
+        // Act
+        Domain.Entity.Record result = _sut.GetRecord(contentFromTxt, tags);
 
+        // Assert
+        result.Should().NotBeNull();
+        result.TimeTokens.Should().Be(timeTokens);
+        _recordServiceMock.Verify(x => x.GetRecordFromContent(contentFromTxt, tags, _dateTimeProviderMock.Object), Times.Once);
+    }
 
-    //[Fact]
-    //public void GetRecord_ShouldReturnEmptyObj_WhenContentFromTxtIsNullOrWhiteSpace()
-    //{
-    //    // Arrange
-    //    var recordManager = new RecordManager(_dateTimeProvider, _txtService, _fileService, _recordService);
-    //    string contentFromTxt = null;
-    //    var tags = new List<Tag> { /* tags */ };
-    //    var expectedRecord = new Record();
-    //    _recordService.GetEmptyObj(_dateTimeProvider).Returns(expectedRecord);
+    [Fact]
+    public void GetRecord_ShouldReturnRecordWithContentDate_WhenContentFromTxtIsNotNullOrWhiteSpace()
+    {
+        // Arrange
+        string contentFromTxt = "Sample content";
+        ICollection<Tag> tags = new List<Tag>();
+        DateTimeOffset contentDate = new DateTimeOffset(2023, 5, 24, 10, 0, 0, TimeSpan.Zero);
 
-    //    // Act
-    //    var result = recordManager.GetRecord(contentFromTxt, tags);
+        _recordServiceMock.Setup(x => x.GetRecordFromContent(contentFromTxt, tags, _dateTimeProviderMock.Object))
+            .Returns(new Domain.Entity.Record { ContentDate = contentDate });
 
-    //    // Assert
-    //    result.Should().Be(expectedRecord);
-    //}
+        // Act
+        Domain.Entity.Record result = _sut.GetRecord(contentFromTxt, tags);
 
-    //[Fact]
-    //public void GetRecord_ShouldReturnRecordFromContent_WhenContentFromTxtIsValid()
-    //{
-    //    // Arrange
-    //    var recordManager = new RecordManager(_dateTimeProvider, _txtService, _fileService, _recordService);
-    //    var contentFromTxt = "Sample content";
-    //    var tags = new List<Tag> { /* tags */ };
-    //    var expectedRecord = new Record();
-    //    _recordService.GetRecordFromContent(contentFromTxt, tags, _dateTimeProvider).Returns(expectedRecord);
-
-    //    // Act
-    //    var result = recordManager.GetRecord(contentFromTxt, tags);
-
-    //    // Assert
-    //    result.Should().Be(expectedRecord);
-    //}
-
+        // Assert
+        result.Should().NotBeNull();
+        result.ContentDate.Should().Be(contentDate);
+        _recordServiceMock.Verify(x => x.GetRecordFromContent(contentFromTxt, tags, _dateTimeProviderMock.Object), Times.Once);
+    }
 }

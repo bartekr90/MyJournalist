@@ -18,11 +18,16 @@ public class TagManagerTests
     }
 
     [Fact]
-    public void MergedTagsSave_ShouldCallUpdateFileAndClearFile()
+    public void MergedTagsSave_ShouldCallAssertMethods_WhenFileExist()
     {
         // Arrange
         var fileMock = _fileServiceMock.Object;
         var tagMock = _tagServiceMock.Object;
+        var tags = new List<Tag> { new Tag { Name = "tag1" } };
+
+        _fileServiceMock.Setup(f => f.CheckFileExists(It.IsAny<string>())).Returns(true);
+        _fileServiceMock.Setup(f => f.ReadFile(It.IsAny<string>())).Returns(tags);
+
 
         // Act
         _sut.MergedTagsSave(TagsMerged03April2023Nr8());
@@ -30,6 +35,30 @@ public class TagManagerTests
         // Assert
         _fileServiceMock.Verify(f => f.UpdateFile(It.IsAny<ICollection<Tag>>(), tagMock.GetFileName()), Times.Once);
         _fileServiceMock.Verify(f => f.ClearFile(tagMock.GetFileName()), Times.Once);
+        _tagServiceMock.Verify(f => f.SetItems(tags), Times.Once);
+        _tagServiceMock.Verify(f => f.GetAllItems(), Times.Once);
+    }
+
+    [Fact]
+    public void MergedTagsSave_ShouldCallAssertMethods_WhenFileDontExist()
+    {
+        // Arrange
+        var fileMock = _fileServiceMock.Object;
+        var tagMock = _tagServiceMock.Object;
+        var tags = new List<Tag> { new Tag { Name = "tag1" } };
+
+        _fileServiceMock.Setup(f => f.CheckFileExists(It.IsAny<string>())).Returns(false);
+
+
+        // Act
+        _sut.MergedTagsSave(TagsMerged03April2023Nr8());
+
+        // Assert
+        _fileServiceMock.Verify(f => f.UpdateFile(It.IsAny<ICollection<Tag>>(), tagMock.GetFileName()), Times.Once);
+        _fileServiceMock.Verify(f => f.ClearFile(tagMock.GetFileName()), Times.Once);
+        _fileServiceMock.Verify(f => f.CreateFile(tagMock.GetFileName()), Times.Once);
+        _tagServiceMock.Verify(f => f.SetItems(tags), Times.Never);
+        _tagServiceMock.Verify(f => f.GetAllItems(), Times.Once);
     }
 
     [Fact]

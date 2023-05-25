@@ -20,10 +20,13 @@ public class DailyRecordsSetManager : IDailyRecordsSetManager
 
     public Dictionary<(int year, int month), List<DailyRecordsSet>> GroupDailySetsByMonth(List<DailyRecordsSet> dailySets)
     {
+        var result = new Dictionary<(int year, int month), List<DailyRecordsSet>>();
+
+        if (dailySets == null)
+            return result;
+
         var dailySetsByMonth = dailySets
             .GroupBy(drs => new { drs.RefersToDate.Year, drs.RefersToDate.Month });
-
-        var result = new Dictionary<(int year, int month), List<DailyRecordsSet>>();
 
         foreach (var group in dailySetsByMonth)
         {
@@ -37,7 +40,7 @@ public class DailyRecordsSetManager : IDailyRecordsSetManager
     {
         _dailySetService.RefersToDate = date;
 
-        if (CheckFileExists())
+        if (_fileService.CheckFileExists(_dailySetService.GetFileName()))
         {
             var list = _fileService.ReadFile(_dailySetService.GetFileName()).ToList() ?? new List<DailyRecordsSet>();
             _dailySetService.SetItems(list);
@@ -45,11 +48,7 @@ public class DailyRecordsSetManager : IDailyRecordsSetManager
         else
             _fileService.CreateFile(_dailySetService.GetFileName());
     }
-    private bool CheckFileExists()
-    {
-        return _fileService.CheckFileExists(_dailySetService.GetFileName());
-    }
-
+   
     public void SetDateForService(DateTimeOffset date)
     {
         _dailySetService.RefersToDate = date;

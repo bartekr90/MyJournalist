@@ -26,17 +26,15 @@ public class RecordManager : IRecordManager
         _dateTimeProvider.DateOfContent = _txtService.GetLastWriteTime();
         return _txtService.ReadData();
     }
+
     public Record GetRecord(string contentFromTxt, ICollection<Tag> tags)
     {
-        Record record;
-
         if (string.IsNullOrWhiteSpace(contentFromTxt))
-            record = _recordService.GetEmptyObj(_dateTimeProvider);
+            return _recordService.GetEmptyObj(_dateTimeProvider);
         else
-            record = _recordService.GetRecordFromContent(contentFromTxt, tags, _dateTimeProvider);
-
-        return record;
+            return _recordService.GetRecordFromContent(contentFromTxt, tags, _dateTimeProvider);
     }
+
     public List<Record> MakeNewRecordList(Record record)
     {
         LoadRecordsFromFile();

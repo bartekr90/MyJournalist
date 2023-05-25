@@ -210,7 +210,7 @@ public class DailyRecordsSetServiceTests
             {RecordListMarch2023nr1(), ContentMergedMarch2023nr1, tupleArray[13] },
             {RecordListMarch2023nr2(), ContentMergedMarch2023nr2, tupleArray[17] },
             {RecordListMarch2023nr3(), ContentMergedMarch2023nr3, tupleArray[21] },
-            {RecordListMarch2023nr4(), ContentMergedMarch2023nr4, tupleArray[25] },
+            {RecordListMarch2023nr4(), ContentMergedMarch2023nr4, tupleArray[25] }
        };
 
     [Theory]

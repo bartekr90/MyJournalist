@@ -510,8 +510,8 @@ public class RecordManagerTests
         // Assert
         _fileServiceMock.Verify(s => s.CheckFileExists(It.IsAny<string>()), Times.Once);
         _fileServiceMock.Verify(s => s.ReadFile(It.IsAny<string>()), Times.Once);
-        _recordServiceMock.Verify(s => s.SetItems(recordsFromFile), Times.Once);
         _fileServiceMock.Verify(s => s.CreateFile(It.IsAny<string>()), Times.Never);
+        _recordServiceMock.Verify(s => s.SetItems(recordsFromFile), Times.Once);
     }
 
     [Fact]

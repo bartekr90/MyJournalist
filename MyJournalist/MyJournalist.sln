@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyJournalist.Domain", "MyJo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyJournalist.App", "MyJournalist.App\MyJournalist.App.csproj", "{2E7E1876-5223-484C-AC86-1B61FEDFB3E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyJournalist.App.Tests", "MyJournalist.App.Tests\MyJournalist.App.Tests.csproj", "{EA5FE0E6-9947-4AA3-BB22-8B1FF6D7028A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyJournalist.App.Tests", "MyJournalist.App.Tests\MyJournalist.App.Tests.csproj", "{EA5FE0E6-9947-4AA3-BB22-8B1FF6D7028A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyJournalist.Email", "MyJournalist.Email\MyJournalist.Email.csproj", "{BFA81E7E-DDA9-4128-9F37-D1894228732A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{EA5FE0E6-9947-4AA3-BB22-8B1FF6D7028A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA5FE0E6-9947-4AA3-BB22-8B1FF6D7028A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA5FE0E6-9947-4AA3-BB22-8B1FF6D7028A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFA81E7E-DDA9-4128-9F37-D1894228732A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFA81E7E-DDA9-4128-9F37-D1894228732A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFA81E7E-DDA9-4128-9F37-D1894228732A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFA81E7E-DDA9-4128-9F37-D1894228732A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

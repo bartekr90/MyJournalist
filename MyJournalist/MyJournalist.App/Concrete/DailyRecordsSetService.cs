@@ -65,7 +65,6 @@ public class DailyRecordsSetService : BaseEntityService<DailyRecordsSet>, IEqual
 
         if (string.IsNullOrEmpty(content))
             content = "no content";
-
         return new DailyRecordsSet
         {
             Records = records,
@@ -82,16 +81,8 @@ public class DailyRecordsSetService : BaseEntityService<DailyRecordsSet>, IEqual
 
     public List<DailyRecordsSet> MakeUnion(ICollection<DailyRecordsSet>? primarySets, ICollection<DailyRecordsSet>? newSets)
     {
-        if (primarySets == null && newSets == null)
-            return null;
-        if (primarySets == null)
-            return newSets.ToList();
-        if (newSets == null)
-            return primarySets.ToList();
-
-        var mergedSets = primarySets.Union(newSets, this);
-
-        return mergedSets.ToList();
+        if (primarySets == null) return newSets?.ToList();
+        return newSets == null ? primarySets.ToList() : primarySets.Union(newSets, this).ToList();
     }
 
     private void MergeDailySets(DailyRecordsSet existingDailySets, DailyRecordsSet dailySet)

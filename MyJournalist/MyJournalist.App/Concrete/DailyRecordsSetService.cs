@@ -52,8 +52,10 @@ public class DailyRecordsSetService : BaseEntityService<DailyRecordsSet>, IEqual
         {
             if (record.HasContent)
             {
-                mergedContent.Append(record.Content);
-                mergedContent.Append("\n***\n");
+                mergedContent.AppendLine(record.Content);
+                mergedContent.AppendLine();
+                mergedContent.AppendLine("***");
+                mergedContent.AppendLine();
             }
         }
         return mergedContent.ToString();

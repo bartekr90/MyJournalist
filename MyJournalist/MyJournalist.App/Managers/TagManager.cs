@@ -30,10 +30,8 @@ public class TagManager : ITagManager
     }
 
 
-    public List<Tag> MergeTags(ICollection<Tag>? primaryTags, ICollection<Tag>? newTags)
-    {
-        return _tagService.MakeUnion(primaryTags, newTags);
-    }
+    public List<Tag> MergeTags(ICollection<Tag>? primaryTags, ICollection<Tag>? newTags) => 
+        _tagService.MakeUnion(primaryTags, newTags);    
 
     public void LoadTagsFromFile()
     {

@@ -1,4 +1,5 @@
 using MyJournalist.Domain.Entity;
+using System.Text;
 
 namespace MyJournalist.App.Tests;
 
@@ -72,7 +73,15 @@ internal class SampleLists
         };
     }
     public static string GetMergedContentNr1 =>
-        "Content for Record 1\n***\nContent for Record 2\n***\n";
+        @"Content for Record 1
+
+***
+
+Content for Record 2
+
+***
+
+";
     public static List<Tag> GetTagListNr1()
     {
         return new List<Tag>
@@ -220,7 +229,23 @@ internal class SampleLists
         };
     }
     public static string GetMergedContentFromApril =>
-        "Test za 27 o4\n***\nLorem ipsum dolor sit amet.\n***\nSample content.\n***\nContent for the evening.\n***\n";
+        @"Test za 27 o4
+
+***
+
+Lorem ipsum dolor sit amet.
+
+***
+
+Sample content.
+
+***
+
+Content for the evening.
+
+***
+
+";
 
     //******************************************************************************************************
     public static List<Domain.Entity.Record> RecordsListNr3Empty()
@@ -281,7 +306,23 @@ internal class SampleLists
         return list;
     }
     public static string ContentMergedMarch2023nr1 =>
-        $"{contentArray[0]}\n***\n{contentArray[1]}\n***\n{contentArray[2]}\n***\n{contentArray[3]}\n***\n";
+        @$"{contentArray[0]}
+
+***
+
+{contentArray[1]}
+
+***
+
+{contentArray[2]}
+
+***
+
+{contentArray[3]}
+
+***
+
+";
 
     //*******************************************************************************************************
 
@@ -324,7 +365,23 @@ internal class SampleLists
         return list;
     }
     public static string ContentMergedMarch2023nr2 =>
-        $"{contentArray[4]}\n***\n{contentArray[5]}\n***\n{contentArray[6]}\n***\n{contentArray[7]}\n***\n";
+        @$"{contentArray[4]}
+
+***
+
+{contentArray[5]}
+
+***
+
+{contentArray[6]}
+
+***
+
+{contentArray[7]}
+
+***
+
+";
     public static List<Domain.Entity.Record> RecordSubListMarch2023nr2Id_3_4 =>
         RecordListMarch2023nr2().Where(r => r.Id <= 4).ToList();
     public static List<Domain.Entity.Record> RecordSubListMarch2023nr2Id_5_6 =>
@@ -375,7 +432,23 @@ internal class SampleLists
         return list;
     }
     public static string ContentMergedMarch2023nr3 =>
-        $"{contentArray[8]}\n***\n{contentArray[9]}\n***\n{contentArray[10]}\n***\n{contentArray[11]}\n***\n";
+        @$"{contentArray[8]}
+
+***
+
+{contentArray[9]}
+
+***
+
+{contentArray[10]}
+
+***
+
+{contentArray[11]}
+
+***
+
+";
 
     //******************************************************************************************************
     public static List<Domain.Entity.Record> RecordListMarch2023nr4()
@@ -403,7 +476,23 @@ internal class SampleLists
         return list;
     }
     public static string ContentMergedMarch2023nr4 =>
-        $"{contentArray[12]}\n***\n{contentArray[13]}\n***\n{contentArray[14]}\n***\n{contentArray[15]}\n***\n";
+        @$"{contentArray[12]}
+
+***
+
+{contentArray[13]}
+
+***
+
+{contentArray[14]}
+
+***
+
+{contentArray[15]}
+
+***
+
+";
 
     //******************************************************************************************************
     public static List<Domain.Entity.Record> RecordListMarch2023TagsTokensNr5()
@@ -448,7 +537,23 @@ internal class SampleLists
         return list;
     }
     public static string ContentMergedMarch2023TagsTokensNr5 =>
-        $"{contentArrayWithTags[0]}\n***\n{contentArrayWithTags[1]}\n***\n{contentArrayWithTags[2]}\n***\n{contentArrayWithTags[3]}\n***\n";
+        @$"{contentArrayWithTags[0]}
+
+***
+
+{contentArrayWithTags[1]}
+
+***
+
+{contentArrayWithTags[2]}
+
+***
+
+{contentArrayWithTags[3]}
+
+***
+
+";
 
     public static List<Tag> TagsMarch2023TokensNr5()
     {
@@ -542,7 +647,23 @@ internal class SampleLists
         return list;
     }
     public static string ContentMerged01April2023TagsNr6 =>
-        $"{contentArrayWithTags[4]}\n***\n{contentArrayWithTags[5]}\n***\n{contentArrayWithTags[6]}\n***\n{contentArrayWithTags[7]}\n***\n";
+        @$"{contentArrayWithTags[4]}
+
+***
+
+{contentArrayWithTags[5]}
+
+***
+
+{contentArrayWithTags[6]}
+
+***
+
+{contentArrayWithTags[7]}
+
+***
+
+";
     public static List<Tag> TagsMerged01April2023Nr6()
     {
         List<Tag> list = new List<Tag>();
@@ -605,7 +726,23 @@ internal class SampleLists
         return list;
     }
     public static string ContentMerged02April2023TagsNr7 =>
-        $"{contentArrayWithTags[8]}\n***\n{contentArrayWithTags[9]}\n***\n{contentArrayWithTags[10]}\n***\n{contentArrayWithTags[11]}\n***\n";
+        @$"{contentArrayWithTags[8]}
+
+***
+
+{contentArrayWithTags[9]}
+
+***
+
+{contentArrayWithTags[10]}
+
+***
+
+{contentArrayWithTags[11]}
+
+***
+
+";
 
     public static List<Tag> Tags02April2023Nr7()
     {
@@ -717,7 +854,23 @@ internal class SampleLists
         return list;
     }
     public static string ContentMerged03April2023TagsNr8 =>
-        $"{contentArrayWithTags[12]}\n***\n{contentArrayWithTags[13]}\n***\n{contentArrayWithTags[14]}\n***\n{contentArrayWithTags[15]}\n***\n";
+        @$"{contentArrayWithTags[12]}
+
+***
+
+{contentArrayWithTags[13]}
+
+***
+
+{contentArrayWithTags[14]}
+
+***
+
+{contentArrayWithTags[15]}
+
+***
+
+";
     public static List<Tag> TagsMerged03April2023Nr8()
     {
         List<Tag> list = new List<Tag>();
@@ -781,7 +934,23 @@ internal class SampleLists
         return list;
     }
     public static string ContentMerged04April2023TagsNr9 =>
-        $"{contentArrayWithTags[16]}\n***\n{contentArrayWithTags[17]}\n***\n{contentArrayWithTags[18]}\n***\n{contentArrayWithTags[19]}\n***\n";
+        @$"{contentArrayWithTags[16]}
+
+***
+
+{contentArrayWithTags[17]}
+
+***
+
+{contentArrayWithTags[18]}
+
+***
+
+{contentArrayWithTags[19]}
+
+***
+
+";
     public static List<Tag> Tags04April2023Nr9()
     {
         List<Tag> list = new List<Tag>();
@@ -1159,6 +1328,157 @@ internal class SampleLists
         }
         return list;
     }
+
+    //*******************************************************************************************************
+    private static string BuildContent3()
+    {
+        var buildContent3 = new StringBuilder();
+        buildContent3.AppendLine("Przyk³adowy teskt");
+        buildContent3.AppendLine();
+        buildContent3.AppendLine("***");
+        buildContent3.AppendLine();
+        buildContent3.AppendLine("daohdoaishdoaihdoahd");
+        buildContent3.AppendLine();
+        buildContent3.AppendLine("***");
+        buildContent3.AppendLine();
+        return buildContent3.ToString();
+    }
+    private static string BuildContent2()
+    {
+       var buildContent2 = new StringBuilder();
+        buildContent2.AppendLine("Przyk³adowy $5 tekst 3 #trzeci");
+        buildContent2.AppendLine();
+        buildContent2.AppendLine("***");
+        buildContent2.AppendLine();
+        buildContent2.AppendLine("Tekst 3 $5#tekst");
+        buildContent2.AppendLine();
+        buildContent2.AppendLine("***");
+        buildContent2.AppendLine();
+        buildContent2.AppendLine("$5Przyk³ad 3 #przyk³ad");
+        buildContent2.AppendLine();
+        buildContent2.AppendLine("***");
+        buildContent2.AppendLine();
+        buildContent2.AppendLine("Inny opis 1 #opis$5");
+        buildContent2.AppendLine();
+        buildContent2.AppendLine("***");
+        buildContent2.AppendLine();
+        return buildContent2.ToString();
+    }
+    private static string BuildContent1()
+    {
+        var buildContent1 = new StringBuilder();
+        buildContent1.AppendLine("Przyk³adowy opis 2 #opis");
+        buildContent1.AppendLine();
+        buildContent1.AppendLine("***");
+        buildContent1.AppendLine();
+        buildContent1.AppendLine("Opis 3 #opis");
+        buildContent1.AppendLine();
+        buildContent1.AppendLine("***");
+        buildContent1.AppendLine();
+        buildContent1.AppendLine("Tekst opisowy 1 #pierwszy");
+        buildContent1.AppendLine();
+        buildContent1.AppendLine("***");
+        buildContent1.AppendLine();
+        buildContent1.AppendLine("Inny tekst 3 #trzeci");
+        buildContent1.AppendLine();
+        buildContent1.AppendLine("***");
+        buildContent1.AppendLine();
+        return buildContent1 .ToString();
+    }
+
+    public static List<DailyRecordsSet> TestDailySetList =>
+        new List<DailyRecordsSet>
+            {
+                new DailyRecordsSet()
+                {
+                     Id = 2,
+                    CreatedById = 123,
+                    CreatedDateTime = new DateTimeOffset(2023, 4, 4, 9, 0, 0, TimeSpan.Zero),
+                    ModifiedById = 123,
+                    ModifiedDateTime = new DateTimeOffset(2023, 4, 4, 9, 0, 0, TimeSpan.Zero),
+                    RefersToDate = new DateTimeOffset(2023, 4, 4, 0, 0, 0, TimeSpan.Zero),
+                    MergedTags = new List<Tag>
+                    {
+                        new Tag
+                        {
+                            Name = "trzeci",
+                            Id = 1,
+                        },
+                        new Tag
+                        {
+                            Name = "pierwszy",
+                            Id = 2,
+                        },
+                        new Tag
+                        {
+                            Name = "opis",
+                            Id = 4,
+                        }
+
+                    },
+                    MergedContents = BuildContent1(),
+                    EmailHasBeenSent = false,
+                    HasAnyRecords = true,
+                    HasAnyTags = true
+                },
+
+                new DailyRecordsSet()
+                {
+                     Id = 1,
+                    CreatedById = 123,
+                    CreatedDateTime = new DateTimeOffset(2023, 5, 11, 9, 0, 0, TimeSpan.Zero),
+                    ModifiedById = 123,
+                    ModifiedDateTime = new DateTimeOffset(2023, 5, 11, 9, 0, 0, TimeSpan.Zero),
+                    RefersToDate = new DateTimeOffset(2023, 5, 11, 0, 0, 0, TimeSpan.Zero),
+                    MergedTags = new List<Tag>
+                    {
+                        new Tag
+                        {
+                            Name = "trzeci",
+                            Id = 1,
+                            TimeTokens = 5
+                        },
+                        new Tag
+                        {
+                            Name = "tekst",
+                            Id = 2,
+                            TimeTokens = 5
+                        },
+                        new Tag
+                        {
+                            Name = "opis",
+                            Id = 4,
+                            TimeTokens = 5
+                        },
+                        new Tag
+                        {
+                            Name = "przyk³ad",
+                            Id = 3,
+                            TimeTokens = 5
+                        }
+                    },
+                    MergedContents = BuildContent2(),
+                    EmailHasBeenSent = false,
+                    HasAnyRecords = true,
+                    HasAnyTags = true
+                },
+
+                new DailyRecordsSet()
+                {
+                     Id = 3,
+                    CreatedById = 123,
+                    CreatedDateTime = new DateTimeOffset(2023, 5, 11, 9, 0, 0, TimeSpan.Zero),
+                    ModifiedById = 123,
+                    ModifiedDateTime = new DateTimeOffset(2023, 5, 11, 9, 0, 0, TimeSpan.Zero),
+                    RefersToDate = new DateTimeOffset(2023, 5, 11, 0, 0, 0, TimeSpan.Zero),
+                    MergedContents = BuildContent3(),
+                    EmailHasBeenSent = false,
+                    HasAnyRecords = true,
+                    HasAnyTags = false
+                },
+
+                new DailyRecordsSet()
+            };  
 
     //*******************************************************************************************************
 

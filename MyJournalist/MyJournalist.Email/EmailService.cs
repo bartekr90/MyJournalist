@@ -1,5 +1,6 @@
 ﻿using FluentEmail.Core;
 using Microsoft.Extensions.Configuration;
+using System.Threading;
 
 namespace MyJournalist.Email;
 
@@ -23,8 +24,38 @@ public class EmailService<T>
             pathFromSettings = null;
 
         _viewPath = pathFromSettings ?? defaultPath;
+        
     }
 
+    public int SendEmail(T model, string subject, string plainTextBody = "")
+    {
+        var type = model?.GetType().Name;
+        var viewName = type + ".cshtml" ?? "default.cshtml";
+        var fullPath = Path.Combine(_viewPath, viewName);
+
+        _email
+        .To(_recipient)
+        .Subject(subject)
+        .UsingTemplateFromFile(fullPath, model)
+        .PlaintextAlternativeBody(plainTextBody);
+
+        var response = _email.Send();
+
+        if (response.Successful)
+        {
+            return 1;
+            // LOGOWANIE
+        }
+        else
+        {
+            return -1;
+            //LOGOWANIE
+            foreach (var error in response.ErrorMessages)
+            {
+                // Console.WriteLine(error);
+            }
+        }
+    }
     public async Task<int> SendEmailAsync(T model, string subject, string plainTextBody = "", CancellationToken? stoppingToken = null)
     {
         var type = model?.GetType().Name;
@@ -34,7 +65,6 @@ public class EmailService<T>
         _email
         .To(_recipient)
         .Subject(subject)
-        .Header("Type", type)
         .UsingTemplateFromFile(fullPath, model)
         .PlaintextAlternativeBody(plainTextBody);
 

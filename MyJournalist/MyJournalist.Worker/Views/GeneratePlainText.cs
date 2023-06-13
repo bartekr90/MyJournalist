@@ -9,16 +9,16 @@ public static class GeneratePlainText
     {
         uint tokens = 0;
         StringBuilder sb = new StringBuilder();
-        sb.AppendLine("Podsumowanie wpisów z dnia: ");
+        sb.AppendLine("Summary of the day's entries: ");
         sb.AppendLine($"{model.RefersToDate.Date.ToString("d")}");
         sb.AppendLine("");
-        sb.AppendLine("Zawartość: ");
+        sb.AppendLine("Content: ");
         sb.AppendLine($"{model.MergedContents}");
         sb.AppendLine("");
 
         if (model.HasAnyTags)
         {
-            sb.AppendLine("Tagi: ");
+            sb.AppendLine("Tags: ");
 
             foreach (var tag in model.MergedTags)
             {
@@ -30,27 +30,27 @@ public static class GeneratePlainText
         }
         else
         {
-            sb.AppendLine("Wpisów nie oznaczono tagami");
+            sb.AppendLine("The following entries were not tagged with.");
             sb.AppendLine("");
         }
 
         if (model.HasAnyTags && tokens > 0)
         {
-            sb.AppendLine("Poświęcony czas: ");
+            sb.AppendLine("Time commitment: ");
 
             foreach (var tag in model.MergedTags)
             {
                 if (tag.TimeTokens != 0)
                 {
                     sb.Append($"#{tag.Name} ");
-                    sb.Append("wykonywano przez: ");
+                    sb.Append("was performed by: ");
                     sb.Append($"{tag.TimeTokens} ");
-                    sb.AppendLine("minut.");
+                    sb.AppendLine("minutes.");
                 }
             }
         }
         sb.AppendLine("");
-        sb.AppendLine("Ten mail został wygenerowany automatycznie przez aplikację MyJournalist.");
+        sb.AppendLine("This email was generated automatically by MyJournalist.");
 
         return sb.ToString();
     }

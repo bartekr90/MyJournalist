@@ -1,6 +1,5 @@
 ﻿@model MyJournalist.Domain.Entity.DailyRecordsSet
 @{
-    //var tags = Model.MergedTags?.ToList() ?? new List<MyJournalist.Domain.Entity.Tag>();
     uint tokens = 0;
 }
 <!doctype html>
@@ -337,26 +336,25 @@
     </style>
 </head>
 <body>
-    <span class="preheader">Wpisy z dnia: @Model.RefersToDate.Date.ToString("d") Podsumowanie: @Model.MergedContents </span>
+    <span class="preheader">Entries of the day: @Model.RefersToDate.Date.ToString("d") Summary: @Model.MergedContents </span>
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
         <tr>
             <td>&nbsp;</td>
+
             <td class="container">
                 <div class="content">
-
                     <table role="presentation" class="main">
-
                         <tr>
                             <td class="wrapper">
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                     <tr>
                                         <td>
-                                            <h2><b>Podsumowanie wpisów z dnia: </b></h2>
+                                            <h2><b>Summary of the day's entries: </b></h2>
                                             <h2 class="printfix">@Model.RefersToDate.Date.ToString("dddd, d MMMM, yyyy")</h2>
 
                                             @if (Model.HasAnyTags)
                                             {
-                                                <h3><b>Tagi:</b></h3>
+                                                <h3><b>Tags:</b></h3>
                                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary printfix">
                                                     <tbody>
                                                         <tr>
@@ -379,56 +377,56 @@
                                             }
                                             else
                                             {
-                                                <h3>Wpisów nie oznaczono tagami</h3>
+                                                <h3>The following entries were not tagged with.</h3>
                                             }
                                         </td>
                                     <tr>
                                         <td>
 
-                                            <h3><b>Zawartość:</b></h3>
+                                            <h3><b>Content:</b></h3>
 
-                                            <p class="printfix">@Model.MergedContents</p>
+                                            <p class="printfix" style="white-space: pre-line">@Model.MergedContents</p>
                                         </td>
                                     </tr>
                                         @if (Model.HasAnyTags && tokens > 0)
                                         {
                                         <tr>
                                             <td>
-                                                <h4><b>Poświęcony czas:</b></h4>
+                                                <h4><b>Time commitment:</b></h4>
 
                                                 <ul class="printfix">
                                                         @foreach (var tag in Model.MergedTags)
                                                         {
                                                             @if (tag.TimeTokens != 0)
                                                             {
-                                                            <li><b>#@tag.Name</b> wykonywano przez: <b>@tag.TimeTokens</b> minut.</li>
+                                                            <li><b>#@tag.Name</b> was performed by: <b>@tag.TimeTokens</b> minutes.</li>
                                                             }
                                                         }
                                                 </ul>
                                             </td>
                                         </tr>
                                         }
+                                </table>
+                            </td>
                         </tr>
                     </table>
+                </div>
             </td>
+        <tr>
+        <tr>
+            <td>&nbsp;</td>
         </tr>
-
     </table>
 
     <div class="footer">
         <table role="presentation" border="0" cellpadding="0" cellspacing="0">
             <tr>
                 <td class="content-block">
-                    <span class="apple-link">Ten mail został wygenerowany automatycznie przez aplikację MyJournalist.</span>
+                    <span class="apple-link">This email was generated automatically by MyJournalist.</span>
                 </td>
             </tr>
         </table>
     </div>
 
-    </div>
-    </td>
-    <td>&nbsp;</td>
-    </tr>
-    </table>
 </body>
 </html>

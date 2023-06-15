@@ -15,6 +15,10 @@ public class Worker : BackgroundService
     private readonly IFluentEmail _fluentEmail;
     private readonly IConfiguration _config;
     private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly FileSystemWatcher _watcher;
+    private readonly string _txtName;
+    private readonly string _txtLocation;
+    private bool _inProgress = false;
 
     public Worker(ILogger<Worker> logger,
                   ITagManager tagManager,
@@ -31,10 +35,15 @@ public class Worker : BackgroundService
         _dailyRecordsSetManager = dailyRecordsSetManager;
         _fluentEmail = fluentEmail;
         _config = config;
+        _watcher = new FileSystemWatcher();
+        _txtName = config["DirSettings:TxtName"] ?? "*.txt";
+        _txtLocation = config["DirSettings:TxtFileLocation"] ?? Path.Combine(Directory.GetCurrentDirectory(), "Data");
     }
     public override Task StartAsync(CancellationToken cancellationToken)
     {
-        //RunAllFilesCheck();
+        FileWatcherSetup();
+        // RunAllFilesCheck();
+        _watcher.EnableRaisingEvents = true;
         return base.StartAsync(cancellationToken);
     }
 
@@ -42,18 +51,43 @@ public class Worker : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            //RunTxtCheck();     
+            //RunTxtCheck(); - tego nie porzebujê bo mam event
+            //zrobic metody async dla plikow
 
-            await Task.Delay(15000, stoppingToken);
+            await Task.Delay(1500000, stoppingToken);
         }
     }
 
     public override Task StopAsync(CancellationToken cancellationToken)
     {
-        //RunAllFilesCheck();
+        _watcher.EnableRaisingEvents = false;
+        _watcher.Dispose();
+        // RunAllFilesCheck();
         return base.StopAsync(cancellationToken);
     }
 
+    private void FileWatcherSetup()
+    {
+        _watcher.Path = _txtLocation;
+        _watcher.Filter = _txtName;
+        _watcher.NotifyFilter = NotifyFilters.Size;
+        _watcher.Changed += OnChanged;
+
+    }
+
+    private async void OnChanged(object sender, FileSystemEventArgs e)
+    {
+        string filePath = Path.Combine(_txtLocation, _txtName);
+        FileInfo fileInfo = new FileInfo(filePath);
+
+        if (!(fileInfo.Length > 0) || _inProgress)
+            return;
+
+        _inProgress = true;
+        await Task.Delay(300);
+        RunTxtCheck();
+        _inProgress &= false;
+    }
 
     public async Task<List<int>> RunParallelAsync(List<DailyRecordsSet> list)
     {

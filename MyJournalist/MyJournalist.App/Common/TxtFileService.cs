@@ -1,4 +1,5 @@
-﻿using MyJournalist.App.Abstract;
+﻿using Microsoft.Extensions.Configuration;
+using MyJournalist.App.Abstract;
 
 namespace MyJournalist.App.Common;
 
@@ -8,10 +9,10 @@ public class TxtFileService : ITxtFileService
     private readonly string _fileName;
     private readonly string _fullPath;
 
-    public TxtFileService()
+    public TxtFileService(IConfiguration config)
     {
-        _filePath = @"D:\temp";
-        _fileName = "myNotes.txt";
+        _filePath = config["DirSettings:TxtFileLocation"] ?? Path.Combine(Directory.GetCurrentDirectory(), "Data");
+        _fileName = config["DirSettings:TxtName"] ?? "myNotes.txt";
         _fullPath = Path.Combine(_filePath, _fileName);
     }
 
@@ -75,5 +76,6 @@ public class TxtFileService : ITxtFileService
             throw new Exception($"An unexpected error occurred while accessing file {_filePath}", ex);
         }
     }
+   
 }
 

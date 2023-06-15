@@ -71,7 +71,7 @@ static void SetEmailSetup(HostBuilderContext host)
     EmailSetup.SenderEmail = emailSettings["SenderEmail"] ?? "defaultEmail";
     EmailSetup.SenderEmailPassword = emailSettings["SenderEmailPassword"] ?? "defaultPassword";
     EmailSetup.DefaultCredentials = defaultCredentials;
-    EmailSetup.LocalSettings = localSettings;
+    EmailSetup.UseLocalSettings = localSettings;
     EmailSetup.HostSmtpLocal = emailSettings["HostSmtpLocal"] ?? "localhost";
     EmailSetup.EnableSslLocal = enableSslLocal;
     EmailSetup.PortLocal = portLocal;

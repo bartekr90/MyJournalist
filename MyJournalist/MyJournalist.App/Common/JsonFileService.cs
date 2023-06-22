@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using MyJournalist.App.Abstract;
+﻿using MyJournalist.App.Abstract;
 using MyJournalist.Domain.Common;
 using Newtonsoft.Json;
 
@@ -10,7 +9,7 @@ public class JsonFileService<T> : IFileCollectionService<T> where T : BaseEntity
     private readonly string _filesPath;
     private readonly JsonSerializerSettings _jsonSettings;
 
-    public JsonFileService(IConfiguration config)
+    public JsonFileService(IFileConfig config)
     {
         _jsonSettings = new JsonSerializerSettings
         {
@@ -19,8 +18,8 @@ public class JsonFileService<T> : IFileCollectionService<T> where T : BaseEntity
             CheckAdditionalContent = false,
             DateParseHandling = DateParseHandling.DateTimeOffset
         };
-        _filesPath = config["DirSettings:JsonFileLocation"] ?? Path.Combine(Directory.GetCurrentDirectory(), "Data");
-
+        _filesPath = string.IsNullOrWhiteSpace(config.JsonFileLocation) ? 
+            Path.Combine(Directory.GetCurrentDirectory(), "Data") : config.JsonFileLocation;
     }
 
     public bool CheckFileExists(string fileName)

@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using MyJournalist.App.Abstract;
+﻿using MyJournalist.App.Abstract;
 
 namespace MyJournalist.App.Common;
 
@@ -9,10 +8,13 @@ public class TxtFileService : ITxtFileService
     private readonly string _fileName;
     private readonly string _fullPath;
 
-    public TxtFileService(IConfiguration config)
-    {
-        _filePath = config["DirSettings:TxtFileLocation"] ?? Path.Combine(Directory.GetCurrentDirectory(), "Data");
-        _fileName = config["DirSettings:TxtName"] ?? "myNotes.txt";
+    public TxtFileService(IFileConfig config)
+    { 
+        string defaultPath = Path.Combine(Directory.GetCurrentDirectory(), "Data");
+        string defaultName = "myNotes.txt";
+
+        _filePath = string.IsNullOrWhiteSpace(config.TxtFileLocation) ? defaultPath : config.TxtFileLocation;
+        _fileName = string.IsNullOrWhiteSpace(config.TxtName) ? defaultName : config.TxtName;
         _fullPath = Path.Combine(_filePath, _fileName);
     }
 

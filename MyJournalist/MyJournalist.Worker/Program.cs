@@ -1,20 +1,33 @@
 using MyJournalist.App.Abstract;
 using MyJournalist.App.Common;
 using MyJournalist.App.Concrete;
+using MyJournalist.App.Config;
 using MyJournalist.App.Managers;
 using MyJournalist.Domain.Entity;
-using MyJournalist.Email;
+using MyJournalist.Email.Config;
+using MyJournalist.Email.Config.Abstract;
 using MyJournalist.Worker;
+using MyJournalist.Worker.Config;
+using System.ComponentModel.DataAnnotations;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((host, services) =>
     {
-        SetEmailSetup(host);
+        var fileConfig = ValidateConfig<FileConfig>(host, "FileConfig");
+        services.AddSingleton<IFileConfig>(servicePovider => fileConfig);
 
-        services
-        .AddFluentEmail(EmailSetup.SenderEmail)
+        var timerConfig = ValidateConfig<TimerConfig>(host, "TimerConfig");
+        services.AddSingleton<ITimerConfig>(servicePovider => timerConfig);
+
+        var smtpConfig = ValidateConfig<EmailSmtpConfig>(host, "EmailSmtpConfig");
+        services.AddSingleton<IEmailSmtpConfig>(servicePovider => smtpConfig);
+
+        var emailConfig = ValidateConfig<EmailConfig>(host, "EmailConfig");
+        services.AddSingleton<IEmailConfig>(servicePovider => emailConfig);
+       
+        services.AddFluentEmail(smtpConfig.SenderEmail)
         .AddRazorRenderer()
-        .AddSmtpSender(EmailSetup.GetClient());
+        .AddSmtpSender(smtpConfig.GetClient());
 
         services.AddHostedService<Worker>();
 
@@ -37,43 +50,21 @@ IHost host = Host.CreateDefaultBuilder(args)
 
 host.Run();
 
-static void SetEmailSetup(HostBuilderContext host)
+static T ValidateConfig<T>(HostBuilderContext host, string section) where T : new()
 {
-    var emailSettings = host.Configuration.GetSection("EmailSettings");
+    T config = host.Configuration.GetSection(section).Get<T>() ?? new T();
 
-    int port;
-    if (!int.TryParse(emailSettings["Port"], out port))
-        port = 25;
+    var results = new List<ValidationResult>();
+    bool valid = Validator.TryValidateObject(config, new ValidationContext(config), results, true);
 
-    int portLocal;
-    if (!int.TryParse(emailSettings["PortLocal"], out portLocal))
-        portLocal = 25;
+    if (!valid)
+    {
+        foreach (var validationResult in results)
+        {
+            Console.WriteLine(validationResult.ErrorMessage);
+        }
+        throw new Exception("Not all the settings are valid");
+    }
 
-    bool enableSsl;
-    if (!bool.TryParse(emailSettings["EnableSsl"], out enableSsl))
-        enableSsl = false;
-
-    bool enableSslLocal;
-    if (!bool.TryParse(emailSettings["EnableSslLocal"], out enableSslLocal))
-        enableSslLocal = false;
-
-    bool localSettings;
-    if (!bool.TryParse(emailSettings["UseLocalSettings"], out localSettings))
-        localSettings = true;
-
-    bool defaultCredentials;
-    if (!bool.TryParse(emailSettings["UseDefaultCredentials"], out defaultCredentials))
-        defaultCredentials = false;
-
-    EmailSetup.HostSmtp = emailSettings["HostSmtp"] ?? "localhost";
-    EmailSetup.EnableSsl = enableSsl;
-    EmailSetup.Port = port;
-    EmailSetup.SenderEmail = emailSettings["SenderEmail"] ?? "defaultEmail";
-    EmailSetup.SenderEmailPassword = emailSettings["SenderEmailPassword"] ?? "defaultPassword";
-    EmailSetup.DefaultCredentials = defaultCredentials;
-    EmailSetup.UseLocalSettings = localSettings;
-    EmailSetup.HostSmtpLocal = emailSettings["HostSmtpLocal"] ?? "localhost";
-    EmailSetup.EnableSslLocal = enableSslLocal;
-    EmailSetup.PortLocal = portLocal;
+    return config;
 }
-

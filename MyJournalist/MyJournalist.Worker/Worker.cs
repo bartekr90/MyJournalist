@@ -2,6 +2,8 @@ using FluentEmail.Core;
 using MyJournalist.App.Abstract;
 using MyJournalist.Domain.Entity;
 using MyJournalist.Email;
+using MyJournalist.Email.Config.Abstract;
+using MyJournalist.Worker.Config;
 using TestWorker.Views;
 
 namespace MyJournalist.Worker;
@@ -13,11 +15,15 @@ public class Worker : BackgroundService
     private readonly IRecordManager _recordManager;
     private readonly IDailyRecordsSetManager _dailyRecordsSetManager;
     private readonly IFluentEmail _fluentEmail;
-    private readonly IConfiguration _config;
+    private readonly IEmailConfig _emailConfig;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly FileSystemWatcher _watcher;
     private readonly string _txtName;
     private readonly string _txtLocation;
+    private readonly TimeSpan _firstInterval;
+    private readonly TimeSpan _secondInterval;
+    private readonly TimeSpan _startTime;
+    private PeriodicTimer _periodicTimer;
     private bool _inProgress = false;
 
     public Worker(ILogger<Worker> logger,
@@ -26,7 +32,9 @@ public class Worker : BackgroundService
                   IDateTimeProvider dateTimeProvider,
                   IDailyRecordsSetManager dailyRecordsSetManager,
                   IFluentEmail fluentEmail,
-                  IConfiguration config)
+                  IEmailConfig emailConfig,
+                  IFileConfig config,
+                  ITimerConfig timerConfig)
     {
         _logger = logger;
         _tagManager = tagManager;
@@ -34,36 +42,61 @@ public class Worker : BackgroundService
         _dateTimeProvider = dateTimeProvider;
         _dailyRecordsSetManager = dailyRecordsSetManager;
         _fluentEmail = fluentEmail;
-        _config = config;
+        _emailConfig = emailConfig;
         _watcher = new FileSystemWatcher();
-        _txtName = config["DirSettings:TxtName"] ?? "*.txt";
-        _txtLocation = config["DirSettings:TxtFileLocation"] ?? Path.Combine(Directory.GetCurrentDirectory(), "Data");
-    }
-    public override Task StartAsync(CancellationToken cancellationToken)
-    {
+
+        string defaultPath = Path.Combine(Directory.GetCurrentDirectory(), "Data");
+        string defaultName = "myNotes.txt";
+        _txtLocation = string.IsNullOrWhiteSpace(config.TxtFileLocation) ? defaultPath : config.TxtFileLocation;
+        _txtName = string.IsNullOrWhiteSpace(config.TxtName) ? defaultName : config.TxtName;
+
+        _startTime = timerConfig.MeasurementTime;
+        TimeSpan currentTime = _dateTimeProvider.Now.TimeOfDay;
+        if (currentTime.CompareTo(_startTime) == 0)
+            _startTime = _startTime.Add(TimeSpan.FromSeconds(1));
+
+        _firstInterval = currentTime > _startTime ? (_startTime.Add(new TimeSpan(24, 0, 0)) - currentTime) : (_startTime - currentTime);
+
+        _secondInterval = new TimeSpan(timerConfig.PeriodInHours, timerConfig.PeriodInMinutes, timerConfig.PeriodInSeconds);
+        
+        if (_secondInterval.CompareTo(new TimeSpan(0, 0, 0)) == 0)
+            _secondInterval = _secondInterval.Add(TimeSpan.FromSeconds(1));
+
+        _periodicTimer = new PeriodicTimer(_firstInterval);
         FileWatcherSetup();
-        // RunAllFilesCheck();
+    }
+    public override async Task StartAsync(CancellationToken cancellationToken)
+    {
+        await RunAllFilesCheckAsync();
         _watcher.EnableRaisingEvents = true;
-        return base.StartAsync(cancellationToken);
+        await base.StartAsync(cancellationToken);
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while (!stoppingToken.IsCancellationRequested)
-        {
-            //RunTxtCheck(); - tego nie porzebujê bo mam event
-            //zrobic metody async dla plikow
+        await _periodicTimer.WaitForNextTickAsync(stoppingToken);
+        _periodicTimer.Dispose();
+        _periodicTimer = new PeriodicTimer(_secondInterval);
 
-            await Task.Delay(1500000, stoppingToken);
+        while (await _periodicTimer.WaitForNextTickAsync(stoppingToken)
+            && !stoppingToken.IsCancellationRequested)
+        {
+           await RunAllFilesCheckAsync();
         }
     }
 
-    public override Task StopAsync(CancellationToken cancellationToken)
+    public override async Task StopAsync(CancellationToken cancellationToken)
     {
         _watcher.EnableRaisingEvents = false;
-        _watcher.Dispose();
-        // RunAllFilesCheck();
-        return base.StopAsync(cancellationToken);
+        await RunAllFilesCheckAsync();
+        await base.StopAsync(cancellationToken);
+    }
+
+    public override void Dispose()
+    {
+        _periodicTimer?.Dispose();
+        _watcher?.Dispose();
+        base.Dispose();
     }
 
     private void FileWatcherSetup()
@@ -72,7 +105,6 @@ public class Worker : BackgroundService
         _watcher.Filter = _txtName;
         _watcher.NotifyFilter = NotifyFilters.Size;
         _watcher.Changed += OnChanged;
-
     }
 
     private async void OnChanged(object sender, FileSystemEventArgs e)
@@ -84,12 +116,12 @@ public class Worker : BackgroundService
             return;
 
         _inProgress = true;
-        await Task.Delay(300);
+        await Task.Delay(200);
         RunTxtCheck();
         _inProgress &= false;
     }
 
-    public async Task<List<int>> RunParallelAsync(List<DailyRecordsSet> list)
+    private async Task<List<int>> SendDailyRecSetListAsync(List<DailyRecordsSet> list)
     {
         List<int> tasks = new List<int>();
 
@@ -101,18 +133,10 @@ public class Worker : BackgroundService
         return tasks;
     }
 
-    private int DailyRecSetEmail(DailyRecordsSet model)
-    {
-        var emailService = new EmailService<DailyRecordsSet>(_fluentEmail, _config);
-        string subject = "Automatyczne podsumowanie";
-        string plainBody = GeneratePlainText.GetDailyRecordsSetBody(model);
-        return emailService.SendEmail(model, subject, plainBody);
-    }
-
     private async Task<int> DailyRecSetEmailAsync(DailyRecordsSet model, CancellationToken? stoppingToken = null)
     {
-        var emailService = new EmailService<DailyRecordsSet>(_fluentEmail, _config);
-        string subject = "Automatyczne podsumowanie";
+        var emailService = new EmailService<DailyRecordsSet>(_fluentEmail, _emailConfig);
+        string subject = $"Automatic summary from the hour: {_startTime}";
         string plainBody = GeneratePlainText.GetDailyRecordsSetBody(model);
         return await emailService.SendEmailAsync(model, subject, plainBody, stoppingToken);
     }
@@ -125,7 +149,7 @@ public class Worker : BackgroundService
         _recordManager.ClearTxt();
     }
 
-    private void RunAllFilesCheck()
+    private async Task RunAllFilesCheckAsync()
     {
         List<Tag> tagsToSave = new List<Tag>();
         string content = _recordManager.GetDataFromTxt();
@@ -152,6 +176,11 @@ public class Worker : BackgroundService
 
             foreach (var group in dailySetsGroupedByMonth)
             {
+                List<int> sendResults = await SendDailyRecSetListAsync(group.Value);
+                foreach (var record in sendResults)
+                {
+                    //logowanie
+                }
                 _dailyRecordsSetManager.SaveListInFile(group.Value);
             }
         }

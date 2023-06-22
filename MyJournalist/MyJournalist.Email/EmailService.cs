@@ -1,70 +1,40 @@
 ﻿using FluentEmail.Core;
-using Microsoft.Extensions.Configuration;
-using System.Threading;
+using MyJournalist.Email.Config.Abstract;
+using System.Text;
 
 namespace MyJournalist.Email;
 
 public class EmailService<T>
 {
     private readonly IFluentEmail _email;
-    private readonly IConfiguration _config;
     private readonly string _recipient;
     private readonly string _viewPath;
+    private readonly string _defaultSubject;
 
-    public EmailService(IFluentEmail email, IConfiguration config, string viewsDir = "Views")
+    public EmailService(IFluentEmail email, IEmailConfig config, string viewsDir = "Views")
     {
         _email = email;
-        _config = config;
-        _recipient = _config.GetValue<string>("EmailSettings:Recipient") ?? "defaultRecipient";
+        _recipient = config.Recipient;
+        _defaultSubject = config.DefaultEmailSubject;
+
         string defaultPath = Path.Combine(Directory.GetCurrentDirectory(), viewsDir);
 
-        string? pathFromSettings = _config.GetValue<string>("DirSettings:ViewsPath");
-
-        if (string.IsNullOrWhiteSpace(pathFromSettings))
-            pathFromSettings = null;
-
-        _viewPath = pathFromSettings ?? defaultPath;
-        
+        _viewPath = string.IsNullOrWhiteSpace(config.ViewsFullPath) ? defaultPath : config.ViewsFullPath;
     }
 
-    public int SendEmail(T model, string subject, string plainTextBody = "")
+    public async Task<int> SendEmailAsync(T model, string subject = "", string plainTextBody = "", CancellationToken? stoppingToken = null)
     {
-        var type = model?.GetType().Name;
-        var viewName = type + ".cshtml" ?? "default.cshtml";
-        var fullPath = Path.Combine(_viewPath, viewName);
+        StringBuilder sb = new StringBuilder();
+        var type = model?.GetType().Name ?? "default";
+        sb.Append(type);
+        sb.Append(".cshtml");
+
+        var fullPath = Path.Combine(_viewPath, sb.ToString());
+        var sub = string.IsNullOrWhiteSpace(subject) ? _defaultSubject : subject;
 
         _email
         .To(_recipient)
-        .Subject(subject)
-        .UsingTemplateFromFile(fullPath, model)
-        .PlaintextAlternativeBody(plainTextBody);
-
-        var response = _email.Send();
-
-        if (response.Successful)
-        {
-            return 1;
-            // LOGOWANIE
-        }
-        else
-        {
-            return -1;
-            //LOGOWANIE
-            foreach (var error in response.ErrorMessages)
-            {
-                // Console.WriteLine(error);
-            }
-        }
-    }
-    public async Task<int> SendEmailAsync(T model, string subject, string plainTextBody = "", CancellationToken? stoppingToken = null)
-    {
-        var type = model?.GetType().Name;
-        var viewName = type + ".cshtml" ?? "default.cshtml";
-        var fullPath = Path.Combine(_viewPath, viewName);
-
-        _email
-        .To(_recipient)
-        .Subject(subject)
+        .Subject(sub)
         .UsingTemplateFromFile(fullPath, model)
         .PlaintextAlternativeBody(plainTextBody);
 

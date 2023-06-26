@@ -4,8 +4,9 @@ using MyJournalist.App.Concrete;
 using MyJournalist.App.Config;
 using MyJournalist.App.Managers;
 using MyJournalist.Domain.Entity;
+using MyJournalist.Email;
+using MyJournalist.Email.Abstract;
 using MyJournalist.Email.Config;
-using MyJournalist.Email.Config.Abstract;
 using MyJournalist.Worker;
 using MyJournalist.Worker.Config;
 using System.ComponentModel.DataAnnotations;
@@ -28,6 +29,8 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddFluentEmail(smtpConfig.SenderEmail)
         .AddRazorRenderer()
         .AddSmtpSender(smtpConfig.GetClient());
+        services.AddSingleton<IEmailService<DailyRecordsSet>, EmailService<DailyRecordsSet>>();
+        services.AddSingleton<IEmailService<Record>, EmailService<Record>>();
 
         services.AddHostedService<Worker>();
 

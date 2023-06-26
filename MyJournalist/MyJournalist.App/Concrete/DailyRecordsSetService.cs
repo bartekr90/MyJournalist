@@ -83,7 +83,9 @@ public class DailyRecordsSetService : BaseEntityService<DailyRecordsSet>, IEqual
 
     public List<DailyRecordsSet> MakeUnion(ICollection<DailyRecordsSet>? primarySets, ICollection<DailyRecordsSet>? newSets)
     {
-        if (primarySets == null) return newSets?.ToList();
+        if (primarySets == null) 
+            return newSets?.ToList() ?? new List<DailyRecordsSet>();
+
         return newSets == null ? primarySets.ToList() : primarySets.Union(newSets, this).ToList();
     }
 

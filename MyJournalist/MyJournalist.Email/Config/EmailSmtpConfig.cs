@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Net.Mail;
-using MyJournalist.Email.Config.Abstract;
+using MyJournalist.Email.Abstract;
 
 namespace MyJournalist.Email.Config;
 

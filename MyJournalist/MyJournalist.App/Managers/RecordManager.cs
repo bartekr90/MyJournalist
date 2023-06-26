@@ -67,6 +67,8 @@ public class RecordManager : IRecordManager
         _fileService.UpdateFile(list, _recordService.GetFileName());
     }
 
+    public void ClearTempFile() => _fileService.ClearFile(_recordService.GetFileName());
+
     public void ClearTxt() => _txtService.ClearData();
 
     public List<Record> FindPastDateRecords(ICollection<Record> list, DateTimeOffset compareDate) =>

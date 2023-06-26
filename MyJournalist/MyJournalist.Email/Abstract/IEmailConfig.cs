@@ -1,4 +1,4 @@
-﻿namespace MyJournalist.Email.Config.Abstract
+﻿namespace MyJournalist.Email.Abstract
 {
     public interface IEmailConfig
     {

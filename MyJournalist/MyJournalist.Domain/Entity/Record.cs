@@ -13,8 +13,8 @@ public class Record : BaseEntity
     public uint? TimeTokens { get; set; }
     public Record()
     {
-        Name = string.Empty;
-        Content = string.Empty;
+        Name = "";
+        Content = "";
         HasContent = false;
         HasAnyTags = false;
     }

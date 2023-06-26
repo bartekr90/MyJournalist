@@ -1,10 +1,10 @@
 ﻿using FluentEmail.Core;
-using MyJournalist.Email.Config.Abstract;
+using MyJournalist.Email.Abstract;
 using System.Text;
 
 namespace MyJournalist.Email;
 
-public class EmailService<T>
+public class EmailService<T> : IEmailService<T>
 {
     private readonly IFluentEmail _email;
     private readonly string _recipient;

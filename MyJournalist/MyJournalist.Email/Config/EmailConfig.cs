@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using MyJournalist.Email.Config.Abstract;
+using MyJournalist.Email.Abstract;
 
 namespace MyJournalist.Email.Config;
 

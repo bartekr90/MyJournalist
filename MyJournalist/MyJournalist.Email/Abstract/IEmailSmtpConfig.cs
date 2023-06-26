@@ -1,6 +1,6 @@
 ﻿using System.Net.Mail;
 
-namespace MyJournalist.Email.Config.Abstract;
+namespace MyJournalist.Email.Abstract;
 
 public interface IEmailSmtpConfig
 {

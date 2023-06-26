@@ -1,4 +1,4 @@
-﻿@model MyJournalist.Domain.Entity.DailyRecordsSet
+﻿@model MyJournalist.Domain.Entity.Record
 @{
     uint tokens = 0;
 }
@@ -336,7 +336,7 @@
     </style>
 </head>
 <body>
-    <span class="preheader">Entries of the day: @Model.RefersToDate.Date.ToString("d") Summary: @Model.MergedContents </span>
+    <span class="preheader">Entrie @Model.Name: @Model.ContentDate.ToString("d") Content: @Model.Content </span>
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
         <tr>
             <td>&nbsp;</td>
@@ -349,8 +349,8 @@
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                     <tr>
                                         <td>
-                                            <h2><b>Summary of the day's entries: </b></h2>
-                                            <h2 class="printfix">@Model.RefersToDate.Date.ToString("dddd, d MMMM, yyyy")</h2>
+                                            <h2><b>Record name: @Model.Name </b></h2>
+                                            <h2 class="printfix">@Model.ContentDate.ToString("dddd, d MMMM, yyyy")</h2>
 
                                             @if (Model.HasAnyTags)
                                             {
@@ -362,7 +362,7 @@
                                                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; border-spacing: 10px 0;">
                                                                     <tbody>
                                                                         <tr>
-                                                                            @foreach (var tag in Model.MergedTags!)
+                                                                            @foreach (var tag in Model.Tags!)
                                                                             {
                                                                                 tokens += tag.TimeTokens;
                                                                                 <td> <a>#@tag.Name</a> </td>
@@ -382,10 +382,19 @@
                                         </td>
                                     <tr>
                                         <td>
+                                                @if (Model.HasContent)
+                                                {
+                                                <h3><b>Content:</b></h3>
 
-                                            <h3><b>Content:</b></h3>
+                                                <p class="printfix" style="white-space: pre-line">@Model.Content</p>
 
-                                            <p class="printfix" style="white-space: pre-line">@Model.MergedContents</p>
+                                                }
+                                                else
+                                                {
+                                                <h3><b>The entry has no content.</b></h3>
+
+                                                }
+
                                         </td>
                                     </tr>
                                         @if (Model.HasAnyTags && tokens > 0)
@@ -395,7 +404,7 @@
                                                 <h4><b>Time commitment:</b></h4>
 
                                                 <ul class="printfix">
-                                                        @foreach (var tag in Model.MergedTags)
+                                                        @foreach (var tag in Model.Tags!)
                                                         {
                                                             @if (tag.TimeTokens != 0)
                                                             {
@@ -422,7 +431,7 @@
         <table role="presentation" border="0" cellpadding="0" cellspacing="0">
             <tr>
                 <td class="content-block">
-                    <span class="apple-link">This email was generated automatically by MyJournalist.</span>
+                    <span class="apple-link">This email was generated on demand by MyJournalist.</span>
                 </td>
             </tr>
         </table>

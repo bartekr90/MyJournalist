@@ -11,10 +11,13 @@ public class Worker : BackgroundService
     private readonly ILogger<Worker> _logger;
     private readonly ITagManager _tagManager;
     private readonly IRecordManager _recordManager;
-    private readonly IDailyRecordsSetManager _dailyRecordsSetManager;    
+    private readonly IDailyRecordsSetManager _dailyRecordsSetManager;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IEmailService<DailyRecordsSet> _dailyRecordsSetEmail;
+    private readonly IEmailService<Record> _recordEmail;
     private readonly FileSystemWatcher _watcher;
+    private readonly string _recordSubject;
+    private readonly string _dailyRecordsSetSubject;
     private readonly string _txtName;
     private readonly string _txtLocation;
     private readonly TimeSpan _firstInterval;
@@ -28,9 +31,11 @@ public class Worker : BackgroundService
                   IRecordManager recordManager,
                   IDateTimeProvider dateTimeProvider,
                   IDailyRecordsSetManager dailyRecordsSetManager,
-                  IFileConfig config,
+                  IFileConfig fileConfig,
                   ITimerConfig timerConfig,
-                  IEmailService<DailyRecordsSet> dailyRecordsSetEmail)
+                  IEmailService<DailyRecordsSet> dailyRecordsSetEmail,
+                  IEmailService<Record> recordEmail,
+                  IConfiguration config)
     {
         _logger = logger;
         _tagManager = tagManager;
@@ -38,12 +43,16 @@ public class Worker : BackgroundService
         _dateTimeProvider = dateTimeProvider;
         _dailyRecordsSetManager = dailyRecordsSetManager;
         _dailyRecordsSetEmail = dailyRecordsSetEmail;
+        _recordEmail = recordEmail;
         _watcher = new FileSystemWatcher();
+
+        _recordSubject = config.GetSection("EmailConfig").GetValue<string>("RecordSubject") ?? "";
+        _dailyRecordsSetSubject = config.GetSection("EmailConfig").GetValue<string>("DailyRecordsSetSubject") ?? "";
 
         string defaultPath = Path.Combine(Directory.GetCurrentDirectory(), "Data");
         string defaultName = "myNotes.txt";
-        _txtLocation = string.IsNullOrWhiteSpace(config.TxtFileLocation) ? defaultPath : config.TxtFileLocation;
-        _txtName = string.IsNullOrWhiteSpace(config.TxtName) ? defaultName : config.TxtName;
+        _txtLocation = string.IsNullOrWhiteSpace(fileConfig.TxtFileLocation) ? defaultPath : fileConfig.TxtFileLocation;
+        _txtName = string.IsNullOrWhiteSpace(fileConfig.TxtName) ? defaultName : fileConfig.TxtName;
 
         _startTime = timerConfig.MeasurementTime;
         TimeSpan currentTime = _dateTimeProvider.Now.TimeOfDay;
@@ -66,7 +75,7 @@ public class Worker : BackgroundService
         await Console.Out.WriteLineAsync("Rozpoczêto pracê");
         _watcher.EnableRaisingEvents = true;
 
-        FromTextToTempFile();
+        await FromTextToTempFile();
         await Console.Out.WriteLineAsync($"Zakoñczono sprawdzenie Txt.");
         await Console.Out.WriteLineAsync($"Raportowanie rozpocznie siê o: {_startTime}");
         await Console.Out.WriteLineAsync($"Raportowanie bêdzie wykonywane co: {_secondInterval}");
@@ -132,7 +141,7 @@ public class Worker : BackgroundService
 
         _inProgress = true;
         await Task.Delay(200);
-        FromTextToTempFile();
+        await FromTextToTempFile();
         _inProgress &= false;
     }
 
@@ -142,9 +151,6 @@ public class Worker : BackgroundService
 
         foreach (var item in list)
         {
-            //if (item.EmailHasBeenSent)
-            //    continue;
-
             var res = await DailyRecSetEmailAsync(item, stoppingToken);
             tasks.Add(res);
 
@@ -156,19 +162,33 @@ public class Worker : BackgroundService
 
     private async Task<int> DailyRecSetEmailAsync(DailyRecordsSet model, CancellationToken? stoppingToken = null)
     {
-        string subject = $"Automatic summary from the hour: {_startTime}";
         string plainBody = GeneratePlainText.GetDailyRecordsSetBody(model);
-        return await _dailyRecordsSetEmail.SendEmailAsync(model, subject, plainBody, stoppingToken);
+        return await _dailyRecordsSetEmail.SendEmailAsync(model, _dailyRecordsSetSubject, plainBody, stoppingToken);
+    }
+    private async Task<int> RecordEmailAsync(Record model, CancellationToken? stoppingToken = null)
+    {
+        string plainBody = GeneratePlainText.GetRecordBody(model);
+        return await _recordEmail.SendEmailAsync(model, _recordSubject, plainBody, stoppingToken);
     }
 
-    public void FromTextToTempFile()
+    public async Task FromTextToTempFile()
     {
         var rec = GetRecordFromText();
+
+        if (rec.Tags is not null && rec.Tags.Any(tag => tag.Name == "sendnow"))
+        {
+            var result = await RecordEmailAsync(rec);
+
+            if (result == 1)
+                await Console.Out.WriteLineAsync("wys³ano wiadomoœc");
+            else
+                await Console.Out.WriteLineAsync("nie wys³ano");
+        }
         _recordManager.SaveRecordInFile(rec);
         _recordManager.ClearTxt();
     }
-   
-    public async Task FromTempToArchiveFileAsync() 
+
+    public async Task FromTempToArchiveFileAsync()
     {
         List<Tag> tagsToSave = new List<Tag>();
         Record rec = GetRecordFromText();

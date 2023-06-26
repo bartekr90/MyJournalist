@@ -5,6 +5,7 @@ namespace MyJournalist.App.Abstract;
 public interface IRecordManager
 {
     void ClearTxt();
+    void ClearTempFile();
     List<Record> FindEqualDateRecords(ICollection<Record> list, DateTimeOffset compareDate);
     List<Record> FindPastDateRecords(ICollection<Record> list, DateTimeOffset compareDate);
     List<Record> GetRecordsWithContent(List<Record> group);

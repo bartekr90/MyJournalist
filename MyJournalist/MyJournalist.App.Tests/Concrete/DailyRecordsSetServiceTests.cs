@@ -253,10 +253,10 @@ public class DailyRecordsSetServiceTests
         ICollection<DailyRecordsSet> newSets = null;
 
         // Act
-        var result = _sut.MakeUnion(primarySets, newSets);
+        List<DailyRecordsSet> result = _sut.MakeUnion(primarySets, newSets);
 
         // Assert
-        result.Should().BeNull();
+        result.Should().BeEmpty();
     }
 
     [Fact]

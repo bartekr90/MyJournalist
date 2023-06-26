@@ -9,7 +9,7 @@ public class JsonFileService<T> : IFileCollectionService<T> where T : BaseEntity
     private readonly string _filesPath;
     private readonly JsonSerializerSettings _jsonSettings;
 
-    public JsonFileService()
+    public JsonFileService(IFileConfig config)
     {
         _jsonSettings = new JsonSerializerSettings
         {
@@ -18,7 +18,8 @@ public class JsonFileService<T> : IFileCollectionService<T> where T : BaseEntity
             CheckAdditionalContent = false,
             DateParseHandling = DateParseHandling.DateTimeOffset
         };
-        _filesPath = @"D:\temp";
+        _filesPath = string.IsNullOrWhiteSpace(config.JsonFileLocation) ? 
+            Path.Combine(Directory.GetCurrentDirectory(), "Data") : config.JsonFileLocation;
     }
 
     public bool CheckFileExists(string fileName)
@@ -105,7 +106,7 @@ public class JsonFileService<T> : IFileCollectionService<T> where T : BaseEntity
         {
             var fullPath = Path.Combine(_filesPath, $"{fileName}.json");
 
-            using (var fileStream = new FileStream(fullPath, FileMode.Open, FileAccess.Write, FileShare.Read))
+            using (var fileStream = new FileStream(fullPath, FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
             using (var writer = new StreamWriter(fileStream))
             {
                 var json = JsonConvert.SerializeObject(obj, Formatting.Indented, _jsonSettings);

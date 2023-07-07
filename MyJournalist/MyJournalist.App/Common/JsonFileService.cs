@@ -18,7 +18,7 @@ public class JsonFileService<T> : IFileCollectionService<T> where T : BaseEntity
             CheckAdditionalContent = false,
             DateParseHandling = DateParseHandling.DateTimeOffset
         };
-        _filesPath = string.IsNullOrWhiteSpace(config.JsonFileLocation) ? 
+        _filesPath = string.IsNullOrWhiteSpace(config.JsonFileLocation) ?
             Path.Combine(Directory.GetCurrentDirectory(), "Data") : config.JsonFileLocation;
     }
 
@@ -84,7 +84,7 @@ public class JsonFileService<T> : IFileCollectionService<T> where T : BaseEntity
         }
         catch (FileNotFoundException)
         {
-            return null;
+            return null!;
         }
         catch (IOException ex)
         {
@@ -150,5 +150,6 @@ public class JsonFileService<T> : IFileCollectionService<T> where T : BaseEntity
             throw new Exception($"An unexpected error occurred while clearing file {fileName} .json", ex);
         }
     }
+   
 }
 

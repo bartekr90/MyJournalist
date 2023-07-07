@@ -192,19 +192,7 @@ public class Worker : BackgroundService
     {
         Record rec = GetRecordFromText();
         List<Record> recordsList = _recordManager.MakeNewRecordList(rec);
-
-        List<DailyRecordsSet> newDailyRecordsSetsList = new();
-        IEnumerable<IGrouping<DateTime, Record>> recordsGroupedByMonth = _recordManager.GroupRecordsByDate(recordsList);
-
-        foreach (IGrouping<DateTime, Record> group in recordsGroupedByMonth)
-        {
-            List<Record> allRecordsFromMonth = _recordManager.GetRecordsWithContent(group.ToList());
-            _dailyRecordsSetManager.SetDateForService(group.Key);
-            List<Tag> tagsForDailySet = _tagManager.MergeTagsFromRecords(allRecordsFromMonth);
-            DailyRecordsSet dailyRecordSet = _dailyRecordsSetManager.GetDailyRecordsSet(allRecordsFromMonth, tagsForDailySet);
-            newDailyRecordsSetsList.Add(dailyRecordSet);
-            //tagsToSave = _tagManager.MergeTags(tagsToSave, tagsForDailySet);
-        }
+        List<DailyRecordsSet> newDailyRecordsSetsList = GetDailyRecordsSets(recordsList);
 
         List<int> sendResults = await SendDailyRecSetListAsync(newDailyRecordsSetsList);
         foreach (var record in sendResults)
@@ -231,6 +219,24 @@ public class Worker : BackgroundService
         _recordManager.ClearTxt();
         _recordManager.ClearTempFile();
         _tagManager.MergedTagsSave(tagsToSave);
+    }
+    
+    private List<DailyRecordsSet> GetDailyRecordsSets(List<Record> recordsList)
+    {
+        List<DailyRecordsSet> newDailyRecordsSetsList = new();
+        IEnumerable<IGrouping<DateTime, Record>> recordsGroupedByMonth = _recordManager.GroupRecordsByDate(recordsList);
+
+        foreach (IGrouping<DateTime, Record> group in recordsGroupedByMonth)
+        {
+            List<Record> allRecordsFromMonth = _recordManager.GetRecordsWithContent(group.ToList());
+            _dailyRecordsSetManager.SetDateForService(group.Key);
+            List<Tag> tagsForDailySet = _tagManager.MergeTagsFromRecords(allRecordsFromMonth);
+            DailyRecordsSet dailyRecordSet = _dailyRecordsSetManager.GetDailyRecordsSet(allRecordsFromMonth, tagsForDailySet);
+            newDailyRecordsSetsList.Add(dailyRecordSet);
+        }
+
+        return newDailyRecordsSetsList;       
+
     }
 
     private Record GetRecordFromText()

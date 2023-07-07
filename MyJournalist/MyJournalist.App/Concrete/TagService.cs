@@ -31,10 +31,10 @@ public class TagService : BaseEntityService<Tag>, IEqualityComparer<Tag>, ITagSe
     public List<Tag> MakeUnion(ICollection<Tag>? primaryTags, ICollection<Tag>? newTags)
     {
         if (primaryTags == null && newTags == null)
-            return null;
-        else if (primaryTags == null)
-            return newTags.ToList();
-        else if (newTags == null)
+            return null!;
+        else if (primaryTags == null || primaryTags.Count == 0)
+            return newTags!.ToList();
+        else if (newTags == null || newTags.Count == 0)
             return primaryTags.ToList();
 
         return primaryTags.Union(newTags, this).ToList();

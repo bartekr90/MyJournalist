@@ -1,7 +1,6 @@
-﻿namespace MyJournalist.Email.Abstract
+﻿namespace MyJournalist.Email.Abstract;
+
+public interface IEmailService<T>
 {
-    public interface IEmailService<T>
-    {
-        Task<int> SendEmailAsync(T model, string subject = "", string plainTextBody = "", CancellationToken? stoppingToken = null);
-    }
+    Task<int> SendEmailAsync(T model, string subject = "", string plainTextBody = "", CancellationToken? stoppingToken = null);
 }

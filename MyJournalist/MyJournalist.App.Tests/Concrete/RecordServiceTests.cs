@@ -39,7 +39,7 @@ public class RecordServiceTests
         _dTProviderMock.Setup(dp => dp.DateOfContent).Returns(date);
 
         // Act
-        var result = _sut.GetRecordFromContent("", null, _dTProviderMock.Object);
+        var result = _sut.GetRecordFromContent("", null!, _dTProviderMock.Object);
 
         // Assert
         result.Should().NotBeNull();
@@ -142,7 +142,7 @@ public class RecordServiceTests
         var result = _sut.GetRecordFromContent("", tags, _dTProviderMock.Object);
 
         // Assert
-        foreach (var tag in result.Tags)
+        foreach (var tag in result.Tags!)
         {
             tag.Should().NotBeNull();
             tag.Name.Should().NotBeNullOrEmpty();

@@ -2,7 +2,7 @@ using MyJournalist.App.Abstract;
 using MyJournalist.Domain.Entity;
 using MyJournalist.Email.Abstract;
 using MyJournalist.Worker.Config;
-using TestWorker.Views;
+using MyJournalist.Worker.Views;
 
 namespace MyJournalist.Worker;
 
@@ -46,8 +46,8 @@ public class Worker : BackgroundService
         _recordEmail = recordEmail;
         _watcher = new FileSystemWatcher();
 
-        _recordSubject = config.GetSection("EmailConfig").GetValue<string>("RecordSubject") ?? "";
-        _dailyRecordsSetSubject = config.GetSection("EmailConfig").GetValue<string>("DailyRecordsSetSubject") ?? "";
+        _recordSubject = config.GetSection("EmailConfig")?.GetValue<string>("RecordSubject") ?? "";
+        _dailyRecordsSetSubject = config.GetSection("EmailConfig")?.GetValue<string>("DailyRecordsSetSubject") ?? "";
 
         string defaultPath = Path.Combine(Directory.GetCurrentDirectory(), "Data");
         string defaultName = "myNotes.txt";
@@ -190,7 +190,6 @@ public class Worker : BackgroundService
 
     public async Task FromTempToArchiveFileAsync()
     {
-        List<Tag> tagsToSave = new List<Tag>();
         Record rec = GetRecordFromText();
         List<Record> recordsList = _recordManager.MakeNewRecordList(rec);
 
@@ -204,7 +203,7 @@ public class Worker : BackgroundService
             List<Tag> tagsForDailySet = _tagManager.MergeTagsFromRecords(allRecordsFromMonth);
             DailyRecordsSet dailyRecordSet = _dailyRecordsSetManager.GetDailyRecordsSet(allRecordsFromMonth, tagsForDailySet);
             newDailyRecordsSetsList.Add(dailyRecordSet);
-            tagsToSave = _tagManager.MergeTags(tagsToSave, tagsForDailySet);
+            //tagsToSave = _tagManager.MergeTags(tagsToSave, tagsForDailySet);
         }
 
         List<int> sendResults = await SendDailyRecSetListAsync(newDailyRecordsSetsList);
@@ -221,6 +220,12 @@ public class Worker : BackgroundService
         foreach (var group in dailySetsGroupedByMonth)
         {
             _dailyRecordsSetManager.SaveListInFile(group.Value);
+        }
+
+        List<Tag> tagsToSave = new List<Tag>();
+        foreach (var item in newDailyRecordsSetsList)
+        {
+            tagsToSave = _tagManager.MergeTags(tagsToSave, item.MergedTags);
         }
 
         _recordManager.ClearTxt();

@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyJournalist.App", "MyJourn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyJournalist.App.Tests", "MyJournalist.App.Tests\MyJournalist.App.Tests.csproj", "{EA5FE0E6-9947-4AA3-BB22-8B1FF6D7028A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyJournalist.Email", "MyJournalist.Email\MyJournalist.Email.csproj", "{BFA81E7E-DDA9-4128-9F37-D1894228732A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyJournalist.Email", "MyJournalist.Email\MyJournalist.Email.csproj", "{BFA81E7E-DDA9-4128-9F37-D1894228732A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyJournalist.Worker.Tests", "MyJournalist.Worker.Tests\MyJournalist.Worker.Tests.csproj", "{19D1F21A-9773-4DC4-A0D5-D24CB28065A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{BFA81E7E-DDA9-4128-9F37-D1894228732A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFA81E7E-DDA9-4128-9F37-D1894228732A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFA81E7E-DDA9-4128-9F37-D1894228732A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19D1F21A-9773-4DC4-A0D5-D24CB28065A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19D1F21A-9773-4DC4-A0D5-D24CB28065A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19D1F21A-9773-4DC4-A0D5-D24CB28065A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19D1F21A-9773-4DC4-A0D5-D24CB28065A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

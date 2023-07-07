@@ -1,7 +1,7 @@
 ﻿using MyJournalist.Domain.Entity;
 using System.Text;
 
-namespace TestWorker.Views;
+namespace MyJournalist.Worker.Views;
 
 public static class GeneratePlainText
 {
